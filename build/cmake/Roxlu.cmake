@@ -5,10 +5,8 @@ cmake_minimum_required(VERSION 2.8)
 # ------------------------------------------------------------------------------------
 
 # ${roxlu_base_dir}       - path to the 'root' of the roxlu repository
-# ${roxlu_source_files}   - the .c/.cpp files of the core roxlu library
 # ${roxlu_libraries}      - any dependencies that the core roxlu library needs
 # ${roxlu_include_dirs}   - include dirs to the roxlu library and dependencies
-# ${roxlu_source_dirs}    - if you want to copy sources on install (e.g. to package for OF, Cinder, Polycode etc..)
 # ${roxlu_install_files}  - add these to the install command (FILES)
 # ${roxlu_definitions}    - add these to the preprocessor definitions
 #
@@ -20,30 +18,6 @@ cmake_minimum_required(VERSION 2.8)
 include(${CMAKE_CURRENT_LIST_DIR}/Triplet.cmake)
 
 set(roxlu_base_dir   ${CMAKE_CURRENT_LIST_DIR}/../../)
-#set(roxlu_source_dir ${CMAKE_CURRENT_LIST_DIR}/../../src/roxlu)
-
-# set(roxlu_source_files
-#   ${roxlu_source_dir}/core/Utils.cpp
-#   ${roxlu_source_dir}/core/Log.cpp
-#   ${roxlu_source_dir}/core/StringUtil.cpp
-#   ${roxlu_source_dir}/io/Buffer.cpp
-#   ${roxlu_source_dir}/io/RingBuffer.cpp
-#   ${roxlu_source_dir}/io/File.cpp
-#   ${roxlu_source_dir}/math/Quat.cpp
-#   ${roxlu_source_dir}/math/Mat4.cpp
-#   ${roxlu_source_dir}/math/Mat3.cpp
-#   ${roxlu_source_dir}/math/Vec4.cpp
-#   ${roxlu_source_dir}/math/Vec3.cpp
-#   ${roxlu_source_dir}/math/Vec2.cpp
-#   ${roxlu_source_dir}/math/Noise.cpp
-#   ${roxlu_source_dir}/math/Perlin.cpp
-# )
-# 
-# set(roxlu_source_dirs
-#   ${roxlu_source_dir}/core
-#   ${roxlu_source_dir}/io
-#   ${roxlu_source_dir}/math
-# )
 
 set(roxlu_include_dirs 
   ${CMAKE_CURRENT_LIST_DIR}/../../include
@@ -113,12 +87,12 @@ macro(roxlu_app_initialize)
   endif()
 
   set(app_source_dir ${app_base_dir}/src)
-  set(app_include_dir ${app_base_dir}/src)
   set(app_source_dirs ${app_source_dir})
   set(app_install_dir ${app_base_dir}/bin)
   set(CMAKE_INSTALL_PREFIX ${app_install_dir})
 
-  roxlu_add_include_dir(${app_include_dir})
+  roxlu_add_include_dir(${app_base_dir}/src)
+  roxlu_add_include_dir(${app_base_dir}/include)
 
 endmacro()
 

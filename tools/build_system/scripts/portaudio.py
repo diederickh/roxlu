@@ -16,7 +16,6 @@ class PortAudio(Base):
         rb_svn_checkout(self, "https://subversion.assembla.com/svn/portaudio/portaudio/trunk/", self.version)
 
     def build(self):
-
         if rb_is_mac():
             dd = rb_get_download_dir(self)
             env = rb_get_autotools_environment_vars()

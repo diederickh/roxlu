@@ -23,7 +23,7 @@ class ZLib(Base):
                        "./configure --prefix='" +rb_install_get_dir() +"' --archs='-arch i386'",
                        "make clean && make V=1 && make install")
                 os.system(" && ".join(cmd))
-            elif rb_is_64_bit():
+            elif rb_is_64bit():
                 cmd = ("cd " +rb_get_download_dir(self),
                        "./configure --prefix='" +rb_install_get_dir() +"' --archs='-arch x86_64'",
                        "make clean && make V=1 && make install")

@@ -46,7 +46,6 @@ class SndFile(Base):
 #             rb_mingw_create_pkgconfig_file("vorbis", "1.3.3", "-lvorbis")
 #             rb_mingw_create_pkgconfig_file("flac", "1.3.0", "-lFLAC_dynamic")
 
-            
             # execute commands in the mingw environment
             cmd = (
                 "cd " +dd,

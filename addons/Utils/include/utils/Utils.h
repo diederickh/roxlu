@@ -156,26 +156,6 @@ static std::string rx_join(const std::vector<T>& entries, std::string sep) {
 }
 
 
-#ifdef ROXLU_WITH_OPENGL
-/*
-// Creates a vertex + frag shader and a program. 
-// We do not yet link the program so you can set attribute locations
-// make sure you call glDeleteProgram, glDeleteShader
-inline GLuint rx_create_shader(const char* vs, const char* fs, GLuint& vertID, GLuint& fragID) {
-  vertID = glCreateShader(GL_VERTEX_SHADER);
-  fragID = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(vertID, 1, &vs, NULL);
-  glShaderSource(fragID, 1, &fs, NULL);
-  glCompileShader(vertID); eglGetShaderInfoLog(vertID);
-  glCompileShader(fragID); eglGetShaderInfoLog(fragID);
-  GLuint prog = glCreateProgram();
-  glAttachShader(prog, vertID);
-  glAttachShader(prog, fragID);
-  return prog;
-}
-*/
-#endif
-
 // -------------------------------------- WIN ---------------------------------------
 #ifdef _WIN32
 
