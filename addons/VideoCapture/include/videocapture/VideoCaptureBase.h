@@ -28,21 +28,21 @@ class VideoCaptureBase {
   int getState();                                                                                        /* get the current state */
                                                                                        
   /* UTILS */                                                                          
-  bool isPixelFormatSupported(int device, VideoCapturePixelFormat fmt);                                  /* check if the given pixel format is supported */
+  bool isPixelFormatSupported(int device, VideoCaptureFormat fmt);                                       /* check if the given pixel format is supported */
   bool isSizeSupported(int device, int width, int height);                                               /* check if the given size is supported by the device */
   bool isFrameRateSupported(int device, double fps);                                                     /* check if the given frame rate is supported; fps must be 2 decimals significant, 29.97, 7.50, 30.00 */
 
   /* CAPABILITIES */
   virtual std::vector<VideoCaptureCapability> getCapabilities(int device) = 0;                                     /* query all capabilities of the device */
   bool getBestMatchingCapability(int device, VideoCaptureSettings cfg,  VideoCaptureCapability& result);           /* this function will return the capability which best matches the given capture settings. It will set the given VideoCaptureCapabilty */
-  std::vector<VideoCapturePixelFormat> getSupportedPixelFormats(int device, int width, int height);
-  std::vector<VideoCaptureRational> getSupportedFrameRates(int device, int width, int height, VideoCapturePixelFormat fmt);
+  std::vector<VideoCaptureFormat> getSupportedPixelFormats(int device, int width, int height);
+  std::vector<VideoCaptureRational> getSupportedFrameRates(int device, int width, int height, VideoCaptureFormat fmt);
   std::vector<VideoCaptureSize> getSupportedSizes(int device);
   
   /* DEBUG - VERBOSE */
   void printSupportedPixelFormats(int device);                                                           /* logs supported pixel formats; independent from the width, height or fps */
   void printSupportedPixelFormats(int device, int width, int height);                                    /* logs the supported pixel formats */
-  void printSupportedFrameRates(int device, int width, int height,  VideoCapturePixelFormat fmt);        /* prints the supported frame rates for the given device, width, height and pixel format */
+  void printSupportedFrameRates(int device, int width, int height,  VideoCaptureFormat fmt);             /* prints the supported frame rates for the given device, width, height and pixel format */
   void printSupportedSizes(int device);                                                                  /* logs the supported sizes to the console */
   void printCapabilities(int device);                                                                    /* print capabilities */
  

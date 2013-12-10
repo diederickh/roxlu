@@ -5,7 +5,7 @@
 
 // TESTING FOR SUPPORTED CAPABILITES
 // --------------------------------------------------------------------------------------
-bool VideoCaptureBase::isPixelFormatSupported(int device, VideoCapturePixelFormat fmt) {
+bool VideoCaptureBase::isPixelFormatSupported(int device, VideoCaptureFormat fmt) {
   std::vector<VideoCaptureCapability> caps = getCapabilities(device);
   return std::find_if(caps.begin(), caps.end(), VideoCaptureCapabilityFindPixelFormat(fmt)) != caps.end();
 }
@@ -35,14 +35,14 @@ std::vector<VideoCaptureSize> VideoCaptureBase::getSupportedSizes(int device) {
   return result;
 }
 
-std::vector<VideoCapturePixelFormat> VideoCaptureBase::getSupportedPixelFormats(int device, int width, int height) {
-  std::vector<VideoCapturePixelFormat> result;
+std::vector<VideoCaptureFormat> VideoCaptureBase::getSupportedPixelFormats(int device, int width, int height) {
+  std::vector<VideoCaptureFormat> result;
   std::vector<VideoCaptureCapability> caps = getCapabilities(device);
  
   for(std::vector<VideoCaptureCapability>::iterator it = caps.begin(); it != caps.end(); ++it) {
     VideoCaptureCapability& cap = *it;
     if(cap.size.width == width && cap.size.height == height) {
-      std::vector<VideoCapturePixelFormat>::iterator it_found = std::find(result.begin(), result.end(), cap.pixel_format);
+      std::vector<VideoCaptureFormat>::iterator it_found = std::find(result.begin(), result.end(), cap.pixel_format);
       if(it_found == result.end()) {
         result.push_back(cap.pixel_format);
       }
@@ -52,7 +52,7 @@ std::vector<VideoCapturePixelFormat> VideoCaptureBase::getSupportedPixelFormats(
   return result;
 }
 
-std::vector<VideoCaptureRational> VideoCaptureBase::getSupportedFrameRates(int device, int width, int height, VideoCapturePixelFormat fmt) {
+std::vector<VideoCaptureRational> VideoCaptureBase::getSupportedFrameRates(int device, int width, int height, VideoCaptureFormat fmt) {
   std::vector<VideoCaptureCapability> caps;
   std::vector<VideoCaptureRational> result;
 
@@ -93,7 +93,7 @@ bool VideoCaptureBase::getBestMatchingCapability(int device,
 void VideoCaptureBase::printSupportedFrameRates(int device, 
                                                 int width, 
                                                 int height,
-                                                VideoCapturePixelFormat fmt) 
+                                                VideoCaptureFormat fmt) 
 {
 
   std::vector<VideoCaptureRational> rates = getSupportedFrameRates(device, width, height, fmt);
@@ -114,7 +114,7 @@ void VideoCaptureBase::printSupportedFrameRates(int device,
 
 void VideoCaptureBase::printSupportedPixelFormats(int device, int width, int height) {
 
-  std::vector<VideoCapturePixelFormat> formats = getSupportedPixelFormats(device, width, height);
+  std::vector<VideoCaptureFormat> formats = getSupportedPixelFormats(device, width, height);
   if(!formats.size()) {
     printf("No supported pixel formats for: %dx%d\n", width, height);
     return;
@@ -122,8 +122,8 @@ void VideoCaptureBase::printSupportedPixelFormats(int device, int width, int hei
 
   printf("Supported pixel formats for device: %d and size: %dx%d\n", device, width, height);
   printf("--------------------------------------------------------------------\n");
-  for(std::vector<VideoCapturePixelFormat>::iterator it = formats.begin(); it != formats.end(); ++it) {
-    VideoCapturePixelFormat f = *it;
+  for(std::vector<VideoCaptureFormat>::iterator it = formats.begin(); it != formats.end(); ++it) {
+    VideoCaptureFormat f = *it;
     std::string fmt_name = rx_videocapture_pixel_format_to_string(f);
     printf("\t%s\n", fmt_name.c_str());
   }
@@ -156,7 +156,7 @@ void VideoCaptureBase::printSupportedPixelFormats(int device) {
   printf("Supported pixel formats for device: %d\n", device);
   printf("--------------------------------------------------------------------\n");
 
-  std::set<VideoCapturePixelFormat> unique_fmts;
+  std::set<VideoCaptureFormat> unique_fmts;
   for(std::vector<VideoCaptureCapability>::iterator it = caps.begin();
       it != caps.end();
       ++it)
@@ -165,12 +165,12 @@ void VideoCaptureBase::printSupportedPixelFormats(int device) {
       unique_fmts.insert(cap.pixel_format);
     }
 
-  for(std::set<VideoCapturePixelFormat>::iterator it = unique_fmts.begin();
+  for(std::set<VideoCaptureFormat>::iterator it = unique_fmts.begin();
       it != unique_fmts.end();
       ++it) 
     {
      
-      VideoCapturePixelFormat pix_fmt = *it;
+      VideoCaptureFormat pix_fmt = *it;
       printf("\t%s\n", rx_videocapture_pixel_format_to_string(pix_fmt).c_str());
     }
 }
@@ -185,7 +185,7 @@ void VideoCaptureBase::printCapabilities(int device) {
 
   int last_width = 0;
   int last_height = 0;
-  VideoCapturePixelFormat last_pix_fmt = VIDEOCAPTURE_FMT_NONE;
+  VideoCaptureFormat last_pix_fmt = VIDEOCAPTURE_FMT_NONE;
   
   for(std::vector<VideoCaptureCapability>::iterator it = caps.begin();
       it != caps.end();

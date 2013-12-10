@@ -13,11 +13,13 @@ roxlu_addon_begin("opengl")
     find_library(fr_cocoa Cocoa)
     find_library(fr_opengl OpenGL)
     find_library(fr_iokit IOKit)
+    find_library(fr_corevideo CoreVideo )
     
     roxlu_add_library(${fr_corefoundation})
     roxlu_add_library(${fr_cocoa})
     roxlu_add_library(${fr_opengl})
     roxlu_add_library(${fr_iokit})
+    roxlu_add_library(${fr_corevideo})
   endif()
 
   if(NOT APPLE AND UNIX)

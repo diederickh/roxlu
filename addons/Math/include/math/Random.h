@@ -8,10 +8,11 @@
 
 #if __APPLE__
 #  include <sys/time.h>
+#  include <unistd.h>
 #endif
 
 static void rx_init_random() {
-#if ROXLU_PLATFORM == ROXLU_APPLE || ROXLU_PLATFORM == ROXLU_IOS || ROXLU_PLATFORM == ROXLU_LINUX
+#if defined(__APPLE__)
   struct timeval tv;
   gettimeofday(&tv, 0);
   long int n = (tv.tv_sec ^ tv.tv_usec) ^ getpid();

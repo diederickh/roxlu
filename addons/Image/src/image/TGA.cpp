@@ -1,6 +1,7 @@
 #include <fstream>
-#include <roxlu/core/Utils.h>
+#include <utils/Utils.h>
 #include <image/TGA.h>
+#include <stdint.h>
 
 TGA::TGA()
 	:pixels(NULL)
@@ -58,7 +59,7 @@ bool TGA::save(string filepath, bool datapath) {
 
 	TGAHeader header;
 	int color_mode;
-	rx_uint8 color_swap;
+	uint8_t color_swap;
 
   if(datapath) {
     filepath = rx_to_data_path(filepath);
@@ -122,7 +123,7 @@ bool TGA::load(string filepath, bool datapath) {
   
   color_type = header[2];
 	
-	num_bytes = (rx_uint32)width * height * (bits_per_pixel / 8);
+	num_bytes = (uint32_t)width * height * (bits_per_pixel / 8);
 	if(pixels != NULL) {
 		delete[] pixels;
 	}

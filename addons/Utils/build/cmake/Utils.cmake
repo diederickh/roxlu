@@ -2,7 +2,6 @@
 roxlu_addon_begin("utils")
   # --------------------------------------------------------------------------------------
   roxlu_addon_add_source_file(utils/Utils.cpp)
-  roxlu_addon_add_source_file(utils/Log.cpp)
   roxlu_addon_add_source_file(utils/RingBuffer.cpp)
 
   if(APPLE)

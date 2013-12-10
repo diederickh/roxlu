@@ -14,6 +14,13 @@
   but the AVCaptureVideoOutput seems to convert this format again. This is something I need to fix, or
   at least show some verbose info when this happens. (May 2013)
 
+  --
+  Update 2013.12.10:
+  Added an `in_codec` to the VideoCaptureSettings so you can use a specific codec and 
+  ask mac to decode it into `in_pixel_format` for you.
+  
+  --
+
 
   TODO: - this code creates nice localized names for video types: 
           https://gist.github.com/roxlu/f2168a49cc5693193826
@@ -30,13 +37,13 @@
 #include <videocapture/Types.h>
 #include <vector>
 
-#define ERR_CM_DEVICE_NOT_FOUND "We couldn't find the given input device"
-#define ERR_CM_FORMAT_NOT_FOUND "Cannot open device because we cannot find the format/size/fps you want"
-#define ERR_CM_CAPTURE_DEVICE "Cannot initialize AVCaptureDeviceInput"
-#define ERR_CM_ALLOC_SESSION "Cannot allocate an AVCaptureSession"
-#define ERR_CM_SESSION_INPUT "Cannot add input to current session; session needs to be configured."
-#define ERR_CM_PIX_FMT "The pixelformat is not supported by AVCaptureDeviceOutput. This does not mean that the webcam doesn't support this format, just the Mac AVCaptureVideoDataOutput not"
-#define ERR_CM_OUTPUT "Cannot add output to current session; sessions needs to be configured."
+#define ERR_CM_DEVICE_NOT_FOUND "We couldn't find the given input device\n"
+#define ERR_CM_FORMAT_NOT_FOUND "Cannot open device because we cannot find the format/size/fps you want\n"
+#define ERR_CM_CAPTURE_DEVICE "Cannot initialize AVCaptureDeviceInput\n"
+#define ERR_CM_ALLOC_SESSION "Cannot allocate an AVCaptureSession\n"
+#define ERR_CM_SESSION_INPUT "Cannot add input to current session; session needs to be configured.\n"
+#define ERR_CM_PIX_FMT "The pixelformat is not supported by AVCaptureDeviceOutput. This does not mean that the webcam doesn't support this format, just the Mac AVCaptureVideoDataOutput not\n"
+#define ERR_CM_OUTPUT "Cannot add output to current session; sessions needs to be configured.\n"
 
 @interface VideoCaptureAVFoundation : NSObject<AVCaptureVideoDataOutputSampleBufferDelegate> {
   AVCaptureSession* session;                             /* Manages the state of the input device */
@@ -51,7 +58,8 @@
 - (int) openDevice: (int) device 
          withWidth: (int) w 
          andHeight: (int) h 
-         andFormat: (VideoCapturePixelFormat) fmt
+         andFormat: (VideoCaptureFormat) fmt
+          andCodec: (VideoCaptureFormat) codec
       andFrameRate: (float) fps;                                                                 /* values like: 30.00, 29.97, 20.00, 5.00 etc.. are valid */
 
 - (int) closeDevice;
@@ -75,9 +83,9 @@
 
 - (NSString*) pixelFormatToString: (CMPixelFormatType) fmt;
 
-- (int) videoCapturePixelFormatToAVFoundationPixelFormat: (VideoCapturePixelFormat) fmt;
+- (int) videoCapturePixelFormatToAVFoundationPixelFormat: (VideoCaptureFormat) fmt;
 
-- (int) avFoundationPixelFormatToVideoCapturePixelFormat: (int) fmt;
+- (int) avFoundationPixelFormatToVideoCaptureFormat: (int) fmt;
 
 - (NSString*) getPixelFormatString: (CMPixelFormatType) fmt;
 
@@ -85,7 +93,7 @@
               forDevice: (int) device;
 
 - (int) isPixelFormatSupportedByCaptureVideoDataOutput: (AVCaptureVideoDataOutput*) o
-                                           pixelFormat: (VideoCapturePixelFormat) fmt;
+                                           pixelFormat: (VideoCaptureFormat) fmt;
 
 - (void) printSupportedPixelFormatsByVideoDataOutput: (AVCaptureVideoDataOutput*) o;          /* note: this are not the supported pixel formats of the webcam. Mac uses another object where you define the output format type. */
 - (void) printSupportedVideoCodecFormatsByVideoDataOutput: (AVCaptureVideoDataOutput*) o;     /* prints ths video codecs that are supported by the data-output (not necessarily of the dvice) */

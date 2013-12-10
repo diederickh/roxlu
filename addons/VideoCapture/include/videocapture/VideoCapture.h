@@ -59,18 +59,18 @@ class VideoCapture {
   int getHeight();                                                                                                                                 /* after opening the device get the width */
 
   /* Query capabilities */
-  bool isPixelFormatSupported(int device, VideoCapturePixelFormat fmt);                                                                            /* test if the device supports the given pixel format; this can be handy if you e.g. want to grab in YUV */
+  bool isPixelFormatSupported(int device, VideoCaptureFormat fmt);                                                                            /* test if the device supports the given pixel format; this can be handy if you e.g. want to grab in YUV */
   bool isSizeSupported(int device, int width, int height);                                                                                         /* test if the device supports grabbing with the given width/height */
   bool isFrameRateSupported(int device, double fps);                                                                                               /* test if the device supports the given frame rate; use 2 decimals; 30.00, 5.00, 60.00 etc.. */
   std::vector<VideoCaptureCapability> getCapabilities(int device);                                                                                 /* get a vector with all found capabilities */
-  std::vector<VideoCaptureRational> getSupportedFrameRates(int device,int width, int height, VideoCapturePixelFormat fmt);                         /* get a vector with the supported frame rates for the given width, height and pixel format */
-  std::vector<VideoCapturePixelFormat> getSupportedPixelFormats(int device, int width, int height);                                                /* get a vector with supported pixel formats for the given width and height */
+  std::vector<VideoCaptureRational> getSupportedFrameRates(int device,int width, int height, VideoCaptureFormat fmt);                         /* get a vector with the supported frame rates for the given width, height and pixel format */
+  std::vector<VideoCaptureFormat> getSupportedPixelFormats(int device, int width, int height);                                                /* get a vector with supported pixel formats for the given width and height */
   std::vector<VideoCaptureSize> getSupportedSizes(int device);                                                                                     /* get a vector with supported width/height */
 
   /* Print capabilities */       
   void printSupportedPixelFormats(int device);                                                                                                     /* prints the supported pixel formats w/o limiting the list to a pixel format or size */
   void printSupportedPixelFormats(int device, int width, int height);                                                                              /* prints what pixel formats are supported for the given width and height regarding the pixel format */
-  void printSupportedFrameRates(int device, int width, int height, VideoCapturePixelFormat fmt);                                                   /* prints the supported frame rates for the given width/height and pixel format */
+  void printSupportedFrameRates(int device, int width, int height, VideoCaptureFormat fmt);                                                   /* prints the supported frame rates for the given width/height and pixel format */
   void printSupportedSizes(int device);                                                                                                            /* just prints the supported video sizes */
   void printCapabilities(int device);                                                                                                              /* prints the capabilites for the given device like supported pixel formats, frame rates and sizes */
 
@@ -149,7 +149,7 @@ inline void VideoCapture::update() {
   cap->update();
 }
 
-inline bool VideoCapture::isPixelFormatSupported(int device, VideoCapturePixelFormat fmt) {
+inline bool VideoCapture::isPixelFormatSupported(int device, VideoCaptureFormat fmt) {
   return cap->isPixelFormatSupported(device, fmt);
 }
 
@@ -165,11 +165,11 @@ inline std::vector<VideoCaptureCapability> VideoCapture::getCapabilities(int dev
   return cap->getCapabilities(device);
 }
 
-inline std::vector<VideoCaptureRational> VideoCapture::getSupportedFrameRates(int device,int width, int height, VideoCapturePixelFormat fmt) {
+inline std::vector<VideoCaptureRational> VideoCapture::getSupportedFrameRates(int device,int width, int height, VideoCaptureFormat fmt) {
   return cap->getSupportedFrameRates(device, width, height, fmt);
 }
 
-inline std::vector<VideoCapturePixelFormat> VideoCapture::getSupportedPixelFormats(int device, int width, int height) {
+inline std::vector<VideoCaptureFormat> VideoCapture::getSupportedPixelFormats(int device, int width, int height) {
   return cap->getSupportedPixelFormats(device, width, height);
 }
 
@@ -185,7 +185,7 @@ inline void VideoCapture::printSupportedPixelFormats(int device, int width, int 
   cap->printSupportedPixelFormats(device, width, height);
 }
 
-inline void VideoCapture::printSupportedFrameRates(int device, int width, int height, VideoCapturePixelFormat fmt) {
+inline void VideoCapture::printSupportedFrameRates(int device, int width, int height, VideoCaptureFormat fmt) {
   cap->printSupportedFrameRates(device, width, height, fmt);
 }
 

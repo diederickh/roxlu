@@ -30,7 +30,8 @@
 - (int) openDevice:(int) dev 
          withWidth:(int) w  
          andHeight:(int) h 
-         andFormat:(VideoCapturePixelFormat) fmt 
+         andFormat:(VideoCaptureFormat) fmt 
+          andCodec:(VideoCaptureFormat) codec
       andFrameRate:(float) fps
 {
 
@@ -71,7 +72,6 @@
       return 0;
     }
 
-
     // Check if we can use this input + add it.
     if(![session canAddInput:input]) {
       printf(ERR_CM_SESSION_INPUT);
@@ -91,9 +91,9 @@
 
       CMFormatDescriptionRef fmt_description = [f formatDescription];
       CMPixelFormatType pixel_format_type = CMFormatDescriptionGetMediaSubType(fmt_description);
-      int libav_format = [self avFoundationPixelFormatToVideoCapturePixelFormat: pixel_format_type];    
-    
-      if(libav_format != fmt) {
+      int cap_format = [self avFoundationPixelFormatToVideoCaptureFormat: pixel_format_type];    
+
+      if(cap_format != codec) {
         continue;
       }
 
@@ -101,7 +101,7 @@
       if(dims.width != w || dims.height != h) {
         continue;
       }
-    
+
       for(AVFrameRateRange* fps_range in [f videoSupportedFrameRateRanges]) {
         VideoCaptureRational rat;
         CMTime dur = [fps_range maxFrameDuration];
@@ -112,9 +112,9 @@
         char buf[512];
         sprintf(buf, "%2.02f", fps_raw);
         sscanf(buf, "%f", &fps_corrected);
+
         if(fps_corrected == fps) {
           did_found_format = true;
-          //format_ref = fmt_description;
           found_fps = fps_range;
           found_format = f;
           break;
@@ -298,7 +298,7 @@
     
     CMFormatDescriptionRef fmt_description = [f formatDescription];
     CMPixelFormatType pixel_format_type = CMFormatDescriptionGetMediaSubType(fmt_description);
-    int vidcap_pixel_format = [self avFoundationPixelFormatToVideoCapturePixelFormat: pixel_format_type];    
+    int vidcap_pixel_format = [self avFoundationPixelFormatToVideoCaptureFormat: pixel_format_type];    
     CMVideoDimensions dims = CMVideoFormatDescriptionGetDimensions([f formatDescription]);
     
     for(AVFrameRateRange* fps in [f videoSupportedFrameRateRanges]) {
@@ -313,7 +313,7 @@
         cap.framerate.den = dur.timescale;
         cap.size.width = dims.width;
         cap.size.height = dims.height;
-        cap.pixel_format = (VideoCapturePixelFormat)vidcap_pixel_format;
+        cap.pixel_format = (VideoCaptureFormat)vidcap_pixel_format;
         cap.index = i;
 
         result.push_back(cap);
@@ -329,28 +329,29 @@
 // ----------------------------------------------------------------------------------------------
 - (NSString*) pixelFormatToString: (CMPixelFormatType) fmt {
   switch (fmt) {
-    case kCMPixelFormat_32ARGB: return @"kCMPixelFormat_32ARGB"; break;
-    case kCMPixelFormat_32BGRA: return @"kCMPixelFormat_32BGRA"; break;
-    case kCMPixelFormat_24RGB: return @"kCMPixelFormat_24RGB"; break;
-    case kCMPixelFormat_16BE555: return @"kCMPixelFormat_16BE555"; break;
-    case kCMPixelFormat_16BE565: return @"kCMPixelFormat_16BE565"; break;
-    case kCMPixelFormat_16LE555: return @"kCMPixelFormat_16LE555"; break;
-    case kCMPixelFormat_16LE565: return @"kCMPixelFormat_16LE565"; break;
-    case kCMPixelFormat_16LE5551: return @"kCMPixelFormat_16LE5551"; break;
-    case kCMPixelFormat_422YpCbCr8: return @"kCMPixelFormat_422YpCbCr8"; break;
-    case kCMPixelFormat_422YpCbCr8_yuvs: return @"kCMPixelFormat_422YpCbCr8_yuvs"; break;
-    case kCMPixelFormat_444YpCbCr8: return @"kCMPixelFormat_444YpCbCr8"; break;
-    case kCMPixelFormat_4444YpCbCrA8: return @"kCMPixelFormat_4444YpCbCrA8"; break;
-    case kCMPixelFormat_422YpCbCr16: return @"kCMPixelFormat_422YpCbCr16"; break;
-    case kCMPixelFormat_422YpCbCr10: return @"kCMPixelFormat_422YpCbCr10"; break;
-    case kCMPixelFormat_444YpCbCr10: return @"kCMPixelFormat_444YpCbCr10"; break;
-    case kCMPixelFormat_8IndexedGray_WhiteIsZero: return @"kCMPixelFormat_8IndexedGray_WhiteIsZero"; break;
-    default: return @"UNKNOWN_PIXEL_FORMAT_TYPE";
+    case kCMPixelFormat_32ARGB:                     return @"kCMPixelFormat_32ARGB";                   break;
+    case kCMPixelFormat_32BGRA:                     return @"kCMPixelFormat_32BGRA";                   break;
+    case kCMPixelFormat_24RGB:                      return @"kCMPixelFormat_24RGB";                    break;
+    case kCMPixelFormat_16BE555:                    return @"kCMPixelFormat_16BE555";                  break;
+    case kCMPixelFormat_16BE565:                    return @"kCMPixelFormat_16BE565";                  break;
+    case kCMPixelFormat_16LE555:                    return @"kCMPixelFormat_16LE555";                  break;
+    case kCMPixelFormat_16LE565:                    return @"kCMPixelFormat_16LE565";                  break;
+    case kCMPixelFormat_16LE5551:                   return @"kCMPixelFormat_16LE5551";                 break;
+    case kCMPixelFormat_422YpCbCr8:                 return @"kCMPixelFormat_422YpCbCr8";               break;
+    case kCMPixelFormat_422YpCbCr8_yuvs:            return @"kCMPixelFormat_422YpCbCr8_yuvs";          break;
+    case kCMPixelFormat_444YpCbCr8:                 return @"kCMPixelFormat_444YpCbCr8";               break;
+    case kCMPixelFormat_4444YpCbCrA8:               return @"kCMPixelFormat_4444YpCbCrA8";             break;
+    case kCMPixelFormat_422YpCbCr16:                return @"kCMPixelFormat_422YpCbCr16";              break;
+    case kCMPixelFormat_422YpCbCr10:                return @"kCMPixelFormat_422YpCbCr10";              break;
+    case kCMPixelFormat_444YpCbCr10:                return @"kCMPixelFormat_444YpCbCr10";              break;
+    case kCMVideoCodecType_JPEG_OpenDML:            return @"kCMVideoCodecType_JPEG_OpenDML";          break;
+    case kCMPixelFormat_8IndexedGray_WhiteIsZero:   return @"kCMPixelFormat_8IndexedGray_WhiteIsZero"; break;
+    default:                                        return @"UNKNOWN_PIXEL_FORMAT_TYPE";
   };
 }
 
 // returns -1 when format is unsupported
-- (int) videoCapturePixelFormatToAVFoundationPixelFormat: (VideoCapturePixelFormat) fmt {
+- (int) videoCapturePixelFormatToAVFoundationPixelFormat: (VideoCaptureFormat) fmt {
   switch(fmt) {
     case VIDEOCAPTURE_FMT_ARGB:           return kCMPixelFormat_32ARGB;                 break;
     case VIDEOCAPTURE_FMT_BGRA:           return kCMPixelFormat_32BGRA;                 break;
@@ -366,7 +367,7 @@
     case VIDEOCAPTURE_FMT_YUV422P16LE:    return kCMPixelFormat_422YpCbCr16;            break; // @todo - not sure about this one 
     case VIDEOCAPTURE_FMT_YUV422P10LE:    return kCMPixelFormat_422YpCbCr10;            break; // @todo - not sure about this one 
     case VIDEOCAPTURE_FMT_YUV444P10LE:    return kCMPixelFormat_444YpCbCr10;            break; // @todo - not sure about this one 
-
+    case VIDEOCAPTURE_FMT_JPEG_OPENML:    return kCMVideoCodecType_JPEG_OpenDML;        break; 
     default: {
       return -1;
     }
@@ -374,7 +375,7 @@
 }
 
 // negative values means that we didn't find the format
-- (int) avFoundationPixelFormatToVideoCapturePixelFormat: (int) fmt {
+- (int) avFoundationPixelFormatToVideoCaptureFormat: (int) fmt {
 
   switch(fmt) {
     case  kCMPixelFormat_32ARGB:           return VIDEOCAPTURE_FMT_ARGB;         break;
@@ -392,7 +393,7 @@
     case  kCMPixelFormat_422YpCbCr10:      return VIDEOCAPTURE_FMT_YUV422P10LE;  break;
     case  kCMPixelFormat_444YpCbCr10:      return VIDEOCAPTURE_FMT_YUV444P10LE;  break;
 
-    case kCMVideoCodecType_JPEG_OpenDML:   return VIDEOCAPTURE_FMT_RGB24;        break;
+    case kCMVideoCodecType_JPEG_OpenDML:   return VIDEOCAPTURE_FMT_JPEG_OPENML;  break;
 
     case kCMPixelFormat_8IndexedGray_WhiteIsZero:
     default: {
@@ -485,8 +486,8 @@
   NSArray* supported_pix_fmts = o.availableVideoCVPixelFormatTypes;
   int i = 0;
   for(NSNumber *curr_pix_fmt in supported_pix_fmts){
-    int vidcap_fmt = [self avFoundationPixelFormatToVideoCapturePixelFormat: [curr_pix_fmt intValue]];
-    std::string vidcap_fmt_str = rx_videocapture_pixel_format_to_string((VideoCapturePixelFormat)vidcap_fmt);
+    int vidcap_fmt = [self avFoundationPixelFormatToVideoCaptureFormat: [curr_pix_fmt intValue]];
+    std::string vidcap_fmt_str = rx_videocapture_pixel_format_to_string((VideoCaptureFormat)vidcap_fmt);
     if(!i) {
       printf("\t%s (%s) [most efficient]\n", vidcap_fmt_str.c_str(), [[self pixelFormatToString: [curr_pix_fmt intValue]] UTF8String]);
     }
@@ -509,12 +510,12 @@
 
 
 - (int) isPixelFormatSupportedByCaptureVideoDataOutput: (AVCaptureVideoDataOutput*) o
-                                                pixelFormat: (VideoCapturePixelFormat) fmt
+                                           pixelFormat: (VideoCaptureFormat)fmt
 {
 
   NSArray* supported_pix_fmts = o.availableVideoCVPixelFormatTypes;
   for(NSNumber *curr_pix_fmt in supported_pix_fmts){
-    int vidcap_fmt = [self avFoundationPixelFormatToVideoCapturePixelFormat: [curr_pix_fmt intValue]];
+    int vidcap_fmt = [self avFoundationPixelFormatToVideoCaptureFormat: [curr_pix_fmt intValue]];
     if(vidcap_fmt == (int)fmt) {
       return 1;
     }
@@ -543,6 +544,7 @@ int avf_open_device(void* cap, int device, VideoCaptureSettings cfg) {
                    withWidth: cfg.width 
                    andHeight: cfg.height 
                    andFormat: cfg.in_pixel_format 
+                    andCodec: cfg.in_codec
                 andFrameRate: cfg.fps];
 }
 

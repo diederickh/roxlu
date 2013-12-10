@@ -1,4 +1,3 @@
-#include <roxlu/core/Utils.h>
 #include <image/Image.h>
 
 // ------------------------------------------------
@@ -9,7 +8,7 @@ Image::Image()
   ,width(0)
   ,height(0)
   ,bits_per_pixel(0)
-  ,fmt(RX_FMT_NONE)
+  ,fmt(IMG_FMT_NONE)
 {
 }
 
@@ -24,7 +23,7 @@ Image::~Image() {
   width = 0;
   height = 0;
   bits_per_pixel = 0;
-  fmt = RX_FMT_NONE;
+  fmt = IMG_FMT_NONE;
 }
 
 Image::Image(const Image& other) 
@@ -33,7 +32,7 @@ Image::Image(const Image& other)
   ,width(0)
   ,height(0)
   ,bits_per_pixel(0)
-  ,fmt(RX_FMT_NONE)
+  ,fmt(IMG_FMT_NONE)
 {
   clone(other);
 }
@@ -76,7 +75,7 @@ void Image::deallocate() {
   width = 0;
   height = 0;
   bits_per_pixel = 0;
-  fmt = RX_FMT_NONE;
+  fmt = IMG_FMT_NONE;
 }
 
 bool Image::copyPixels(unsigned char* pix, unsigned int w, unsigned int h, unsigned format) {
@@ -141,6 +140,12 @@ bool Image::save(std::string filename, bool datapath) {
   return false;
 }
 
+void Image::print() {
+  RX_VERBOSE("img.width: %d", getWidth());
+  RX_VERBOSE("img.height: %d", getHeight());
+  RX_VERBOSE("img.bits_per_pixel: %d\n", getBitsPerPixel());
+}
+
 // ------------------------------------------------
 
 bool rx_load_png(Image& img, std::string filename, bool datapath) {
@@ -153,15 +158,15 @@ bool rx_load_png(Image& img, std::string filename, bool datapath) {
   
   switch(png.getColorType()) {
     case PNG_COLOR_TYPE_GRAY: {
-      img.setPixelFormat(RX_FMT_GRAY8);
+      img.setPixelFormat(IMG_FMT_GRAY8);
       break;
     }
     case PNG_COLOR_TYPE_RGB: {
-      img.setPixelFormat(RX_FMT_RGB24);
+      img.setPixelFormat(IMG_FMT_RGB24);
       break;
     }
     case PNG_COLOR_TYPE_RGB_ALPHA: {
-      img.setPixelFormat(RX_FMT_RGBA32);
+      img.setPixelFormat(IMG_FMT_RGBA32);
       break;
     }
     default: {
@@ -185,7 +190,7 @@ bool rx_load_jpg(Image& img, std::string filename, bool datapath) {
   }
 
   if(jpg.getNumChannels() == 3) {
-    img.setPixelFormat(RX_FMT_RGB24);
+    img.setPixelFormat(IMG_FMT_RGB24);
   }
   else {
     RX_ERROR(ERR_IMG_UNSUPPORTED_FORMAT);
@@ -208,10 +213,10 @@ bool rx_load_tga(Image& img, std::string filename, bool datapath) {
   }
 
   if(tga.getNumChannels() == 4) {
-    img.setPixelFormat(RX_FMT_RGBA32);
+    img.setPixelFormat(IMG_FMT_RGBA32);
   }
   else if(tga.getNumChannels() == 3) {
-    img.setPixelFormat(RX_FMT_RGB24);
+    img.setPixelFormat(IMG_FMT_RGB24);
   }
   else {
     RX_ERROR(ERR_IMG_UNSUPPORTED_FORMAT);
@@ -232,13 +237,13 @@ bool rx_save_png(Image& img, std::string filename, bool datapath) {
 
   png_uint_32 type;
 
-  if(img.getPixelFormat() == RX_FMT_GRAY8) {
+  if(img.getPixelFormat() == IMG_FMT_GRAY8) {
     type = PNG_COLOR_TYPE_GRAY;
   }
-  else if(img.getPixelFormat() == RX_FMT_RGB24) {
+  else if(img.getPixelFormat() == IMG_FMT_RGB24) {
     type = PNG_COLOR_TYPE_RGB;
   }
-  else if(img.getPixelFormat() == RX_FMT_RGBA32) {
+  else if(img.getPixelFormat() == IMG_FMT_RGBA32) {
     type = PNG_COLOR_TYPE_RGB_ALPHA;
   }
   else {

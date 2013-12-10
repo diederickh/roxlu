@@ -6,6 +6,7 @@ VideoCaptureSettings::VideoCaptureSettings()
   ,height(0)
   ,fps(0.0f)
   ,in_pixel_format(VIDEOCAPTURE_FMT_NONE)
+  ,in_codec(VIDEOCAPTURE_FMT_NONE)
 {
 }
 
@@ -33,7 +34,6 @@ bool VideoCaptureSettings::validate() {
   }
 
   return result;
-      
 }
 
 // ---------------------------------------------------------------------

@@ -1,5 +1,5 @@
 #include <image/PNG.h>
-#include <roxlu/core/Utils.h>
+#include <utils/Utils.h>
 #include <png.h>
 
 // ----------------------------------------------------------------
@@ -258,7 +258,6 @@ bool PNG::save(std::string filename, bool datapath) {
     fp = NULL;
     return false;
   }
-  
 
   info_ptr = png_create_info_struct(png_ptr);
   if(info_ptr == NULL) {

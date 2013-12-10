@@ -21,7 +21,7 @@ enum VideoCaptureImplementation {
   VIDEOCAPTURE_V4L2                          // Linux   - DEFAULT - Use the Video4Linux sample grabber
 };
 
-enum VideoCapturePixelFormat {
+enum VideoCaptureFormat {
   VIDEOCAPTURE_FMT_NONE,
   VIDEOCAPTURE_FMT_UYVY422,
   VIDEOCAPTURE_FMT_YUYV422,
@@ -37,7 +37,8 @@ enum VideoCapturePixelFormat {
   VIDEOCAPTURE_FMT_RGB555BE,
   VIDEOCAPTURE_FMT_RGB555LE,
   VIDEOCAPTURE_FMT_RGB565BE,
-  VIDEOCAPTURE_FMT_RGB565LE
+  VIDEOCAPTURE_FMT_RGB565LE,
+  VIDEOCAPTURE_FMT_JPEG_OPENML                /* osx kCMVideoCodeType_JPEG_OpenML */
 };
 
 // VideoCaptureSize represents the capture width/height a device can use to capture (most devices support multiple sizes)
@@ -69,14 +70,14 @@ struct VideoCaptureCapability {
   int index;                                       /* default to -1, but can be used by the implementation to reference an internal index */
   VideoCaptureSize size;
   VideoCaptureRational framerate;
-  VideoCapturePixelFormat pixel_format;
+  VideoCaptureFormat pixel_format;
 };
 
 // Used to filter capabilities on pixel formats
 struct VideoCaptureCapabilityFindPixelFormat {
-  VideoCaptureCapabilityFindPixelFormat(VideoCapturePixelFormat fmt):fmt(fmt){}
+  VideoCaptureCapabilityFindPixelFormat(VideoCaptureFormat fmt):fmt(fmt){}
   bool operator()(const VideoCaptureCapability& c) { return c.pixel_format == fmt; } 
-  VideoCapturePixelFormat fmt;
+  VideoCaptureFormat fmt;
 };
 
 
@@ -110,7 +111,8 @@ struct VideoCaptureSettings {
   int width;                                   /* the width you want to capture in */ 
   int height;                                  /* the height you want to capture in */
   float fps;                                   /* the framerate you want to capture in, must  2 digit accurate, e.g. 30.00, 29.97, 20.00 etc... */
-  VideoCapturePixelFormat in_pixel_format;     /* the pixel format you want to receive you're data in.. this must be supported */
+  VideoCaptureFormat in_pixel_format;          /* the pixel format you want to receive you're data in.. this must be supported */
+  VideoCaptureFormat in_codec;                 /* the codec you want to capture in. On Mac you can ask for e.g. JPEG as codec and let the pixels delivered in YUV (in_pixel_format) */
 };
 
 // -----------------------------------

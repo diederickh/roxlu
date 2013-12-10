@@ -1,7 +1,7 @@
 #ifndef ROXLU_OPENGL_H
 #define ROXLU_OPENGL_H
 
-#include <opengl/GL.h>
+#include <opengl/Headers.h>
 #include <opengl/Error.h>
 #include <opengl/Camera.h>
 #include <opengl/Vertex.h>

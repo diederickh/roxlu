@@ -3,10 +3,17 @@
 
 #include <assert.h>
 #include <string>
-#include <utils/Log.h>
+
+#include <utils/Utils.h>
 #include <image/PNG.h>
 #include <image/JPG.h>
 #include <image/TGA.h>
+
+#define IMG_FMT_NONE 0
+#define IMG_FMT_RGB24 1
+#define IMG_FMT_BGR24 2
+#define IMG_FMT_GRAY8 3
+#define IMG_FMT_RGBA32 4
 
 #define ERR_IMG_UNSUPPORTED_FORMAT "The given image pixel format is not supported"
 #define ERR_IMG_UNSUPPORTED_EXT "The given image type is not supported (jpg, png, tga)"
@@ -39,6 +46,8 @@ class Image {
   bool setPixelFormat(unsigned int format);
 
   bool copyPixels(unsigned char* pix, unsigned int w, unsigned int h, unsigned int fmt);
+
+  void print();
 
   unsigned char& operator[](unsigned int dx);
 
@@ -79,6 +88,10 @@ inline unsigned int Image::getPixelFormat() {
   return fmt;
 }
 
+inline unsigned int Image::getBitsPerPixel() {
+  return bits_per_pixel;
+}
+
 inline void Image::setWidth(int w) {
   width = w;
 }
@@ -92,23 +105,23 @@ inline bool Image::setPixelFormat(unsigned int format) {
 
   switch(fmt) {
 
-    case RX_FMT_GRAY8: {
+    case IMG_FMT_GRAY8: {
       bits_per_pixel = 8;
       break;
     }
 
-    case RX_FMT_RGBA32: {
+    case IMG_FMT_RGBA32: {
       bits_per_pixel = 32;
       break;
     }
 
-    case RX_FMT_BGR24:
-    case RX_FMT_RGB24: {
+    case IMG_FMT_BGR24:
+    case IMG_FMT_RGB24: {
       bits_per_pixel = 24;
       break;
     };
 
-    case RX_FMT_NONE:
+    case IMG_FMT_NONE:
     default: {
       RX_ERROR(ERR_IMG_UNSUPPORTED_FORMAT);
       return false;

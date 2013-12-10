@@ -1,7 +1,7 @@
 #ifndef ROXLU_MP3_WRITER_H
 #define ROXLU_MP3_WRITER_H
 
-#include <utils/Log.h>
+#include <utils/Utils.h>
 #include <lame/lame.h>
 #include <string>
 #include <fstream>

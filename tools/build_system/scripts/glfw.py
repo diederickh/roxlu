@@ -6,7 +6,7 @@ class GLFW(Base):
     
     def __init__(self):
         self.name = "glfw"
-        self.version = "5da6a903f9a533063a77400b0a8873d5c9753f99"
+        self.version = ""
         self.compilers = [config.COMPILER_MAC_GCC, config.COMPILER_WIN_MSVC2010, config.COMPILER_WIN_MSVC2012]
         self.arch = [config.ARCH_M32, config.ARCH_M64]
         self.dependencies = []
