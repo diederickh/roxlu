@@ -16,7 +16,7 @@ class LibUSB(Base):
         rb_git_clone(self, "git://git.libusb.org/libusb.git")
 
     def build(self):
-        if rb_is_mac():
+        if rb_is_unix():
             dd = rb_get_download_dir(self)
             cmd = (
                 "cd "+dd,

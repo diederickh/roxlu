@@ -17,11 +17,18 @@ class GLXW(Base):
 
     def build(self):
         dd = rb_get_download_dir(self)
-        cmd = (
-            "cd " +dd,
-            "python glxw_gen.py"
+        if rb_is_linux():
+            cmd = (
+                "cd " +dd,
+                "python2 glxw_gen.py"
             )
-        rb_execute_shell_commands(self, cmd)
+            rb_execute_shell_commands(self, cmd)
+        else:
+            cmd = (
+                "cd " +dd,
+                "python glxw_gen.py"
+            )
+            rb_execute_shell_commands(self, cmd)
 
         return True
 

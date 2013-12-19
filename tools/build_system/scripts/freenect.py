@@ -31,7 +31,13 @@ class Freenect(Base):
 
     def deploy(self):
         if rb_is_unix():
-            rb_deploy_lib(rb_install_get_lib_file("libfreenect.a"))
+            if not rb_is_mac():
+                if rb_is_64bit():
+                    rb_deploy_lib(rb_install_get_dir() +"lib64/libfreenect.a")
+                else:
+                    rb_red_ln("@todo freenect mac 32bit")
+            else:
+                rb_deploy_lib(rb_install_get_lib_file("libfreenect.a"))
             rb_deploy_headers(dir = rb_install_get_dir() +"include/libfreenect/", subdir = "libfreenect")
             rb_deploy_header(rb_install_get_include_file("libfreenect.hpp"))
         return True

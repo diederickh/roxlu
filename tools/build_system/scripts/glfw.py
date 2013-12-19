@@ -28,6 +28,9 @@ class GLFW(Base):
          elif rb_is_mac():
              rb_deploy_lib(rb_install_get_lib_file("libglfw3.a"))
              rb_deploy_headers(dir = rb_install_get_include_dir() +"GLFW")
+         elif rb_is_linux():
+             rb_deploy_lib(rb_install_get_lib_file("libglfw3.a"))
+             rb_deploy_headers(dir = rb_install_get_include_dir() +"GLFW")
          
                 
             
