@@ -57,7 +57,11 @@ from scripts.faac import Faac
 from scripts.libav import LibAV
 from scripts.websockets import Websockets
 from scripts.libharu import LibHaru
-from scripts.roxlu import Roxlu
+from scripts.anttweakbar import AntTweakbar # not finished yet
+from scripts.libusb import LibUSB
+from scripts.freenect import Freenect
+from scripts.opencv import OpenCV
+from scripts.roxlu import Roxlu 
 
 from colorama import init, Fore, Back, Style
 init()
@@ -126,6 +130,10 @@ ins_faac = Faac()
 ins_libav = LibAV()
 ins_websockets = Websockets()
 ins_libharu = LibHaru()
+ins_anttweakbar = AntTweakbar()
+ins_libusb = LibUSB()
+ins_freenect = Freenect()
+ins_opencv = OpenCV()
 ins_roxlu = Roxlu()
 
 
@@ -138,7 +146,7 @@ installers = [ins_glfw, ins_jansson, ins_jpeg, ins_tiff, ins_png, ins_zlib,
               ins_flvmeta, ins_h264bitstream, ins_pixman, ins_cairo, ins_plplot,
               ins_pango, ins_gnuplot, ins_samplerate, ins_nanomsg, ins_rapidxml,
               ins_libyuv, ins_glxw, ins_faac, ins_libav, ins_websockets,
-              ins_libharu,
+              ins_libharu, ins_anttweakbar, ins_libusb, ins_freenect, ins_opencv,
               ins_roxlu]
 
 

@@ -38,6 +38,7 @@ VideoCapture::VideoCapture(VideoCaptureImplementation imp)
 }
 
 VideoCapture::~VideoCapture() {
+
   if(cap) {
     cap->stopCapture();
     cap->closeDevice();

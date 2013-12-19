@@ -9,7 +9,7 @@ class AutoMake(Base):
         self.version = "1.14"
         self.compilers = [config.COMPILER_MAC_GCC]
         self.arch = [config.ARCH_M32, config.ARCH_M64]
-        self.dependencies = []
+        self.dependencies = ["autoconf"]
         self.info = ""
         
     def download(self): 
