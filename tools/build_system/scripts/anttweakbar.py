@@ -7,19 +7,25 @@ class AntTweakbar(Base):
     
     def __init__(self):
         self.name = "anttweakbar"
-        self.version = "116"
+        self.version = "b716e5cdaff0fadf62feac46104c6b1459e44133"
         self.compilers = [config.COMPILER_MAC_GCC, config.COMPILER_MAC_CLANG]
         self.arch = [config.ARCH_M32, config.ARCH_M64]
         self.dependencies = []
-        self.info = "NOT FINISHED YET"
+        self.info = "AntTweakbar does not work on 10.9, we supply a patch"
 
     def download(self):
-        #                                 "https://sourceforge.net/projects/anttweakbar/files/anttweakbar/116/AntTweakBar_" +self.version +".zip/download",
-        rb_download_and_extract(self, 
-                                "http://sourceforge.net/projects/anttweakbar/files/AntTweakBar_116.zip/download",
-                                "AntTweakBar_" +self.version +".zip", 
-                                "AntTweakBar")
+        rb_git_clone(self, "git://git.code.sf.net/p/anttweakbar/code", self.version)
 
+        # Apply patch on mac (dlopen doesn't seem to work)
+        if rb_is_mac():
+            rb_copy_to_download_dir(self, "anttweakbar_macos_ldopen.patch")
+            dd = rb_get_download_dir(self)
+            cmd = (
+                "cd "+dd,
+                "git checkout -b fix",
+                "git am -3 --ignore-whitespace anttweakbar_macos_ldopen.patch"
+            )
+            rb_execute_shell_commands(self, cmd, rb_get_autotools_environment_vars())
 
 
     def build(self):
@@ -31,25 +37,24 @@ class AntTweakbar(Base):
                 "make -f Makefile.osx"
                 )
             rb_execute_shell_commands(self, cmd, rb_get_autotools_environment_vars())
-            #rb_build_with_autotools(self)
+        else: 
+            rb_red_ln("@todo build anttweakbar on non-unix")
 
         return True
 
     def is_build(self):
-        return True
         if rb_is_unix():
-            return rb_install_lib_file_exists("libwebsockets.a")
+            return rb_install_lib_file_exists("libAntTweakBar.a"
         else:
-            rb_red_ln("@todo websockets check if file exists on windows")
+            rb_red_ln("@todo anttweakbar check if file exists on windows")
         return True
 
     def deploy(self):
-        return True
         if rb_is_unix():
-            rb_deploy_lib(rb_install_get_lib_file("libwebsockets.a"))
-            rb_deploy_header(rb_install_get_include_file("libwebsockets.h"))
+            rb_deploy_lib(rb_get_download_dir(self) +"lib/libAntTweakBar.a")
+            rb_deploy_header(rb_get_download_dir(self) +"include/AntTweakBar.h")
         else:
-            rb_red_ln("@todo deploy websockets on non-unix")
+            rb_red_ln("@todo deploy anttweakbar on non-unix")
         return True
 
 

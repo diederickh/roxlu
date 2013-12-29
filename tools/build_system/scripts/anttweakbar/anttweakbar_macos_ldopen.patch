@@ -1,0 +1,25 @@
+From dedcb68d557e02f2452938082bfccc37d06e7991 Mon Sep 17 00:00:00 2001
+From: roxlu <diederick@apollomedia.nl>
+Date: Sun, 29 Dec 2013 14:30:24 +0100
+Subject: [PATCH] pathc
+
+---
+ src/LoadOGLCore.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/LoadOGLCore.cpp b/src/LoadOGLCore.cpp
+index 2daa573..c45c233 100644
+--- a/src/LoadOGLCore.cpp
++++ b/src/LoadOGLCore.cpp
+@@ -484,7 +484,7 @@ namespace GLCore { PFNGLGetProcAddress _glGetProcAddress = NULL; }
+         void *proc=NULL;
+         if (gl_dyld == NULL) 
+         {
+-            gl_dyld = dlopen("OpenGL",RTLD_LAZY);
++            gl_dyld = dlopen("/System/Library/Frameworks/OpenGL.framework/Versions/Current/OpenGL",RTLD_LAZY);
+         }
+         if (gl_dyld) 
+         {
+-- 
+1.8.3.4 (Apple Git-47)
+
