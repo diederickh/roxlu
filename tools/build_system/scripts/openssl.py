@@ -94,6 +94,6 @@ class OpenSSL(Base):
         else:
             rb_deploy_lib(rb_install_get_lib_file("libssl.a"))
             rb_deploy_lib(rb_install_get_lib_file("libcrypto.a"))
-            rb_deploy_headers(dir = rb_install_get_include_dir() +"openssl", subdir = "openssl")
+            rb_deploy_headers(dir = rb_install_get_include_dir() +"openssl")
 
         

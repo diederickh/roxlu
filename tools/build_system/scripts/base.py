@@ -116,6 +116,11 @@ def rb_get_download_dir(script = None):
     else:
         return os.path.abspath(config.download_dir +"/" +script.name) +"/"
 
+
+# check if the download dir exist for the given script
+def rb_download_dir_exists(script):
+    return os.path.exists(rb_get_download_dir(script))
+
 # get the directory where the build scripts are stored; or the build script specific one when a script is given
 def rb_get_script_dir(script = None):
     if script is None:
@@ -620,12 +625,6 @@ def rb_get_cflags():
     if rb_is_debug():
         cf += " -g -O0 "
         
-    # on windows we use the deploy as our local development dir, on unices we can use the install dir
-    if rb_is_win():
-        cf += " -I" +os.path.normpath(rb_deploy_get_include_dir()) +" "
-    else:
-        cf += " -I" +rb_install_get_include_dir() +" "
-
     return cf
 
 def rb_get_cc():
@@ -674,6 +673,13 @@ def rb_get_cppflags():
     cf = ""
     if rb_is_debug():
         cf = "-DDEBUG "
+
+    # on windows we use the deploy as our local development dir, on unices we can use the install dir
+    if rb_is_win():
+        cf += " -I" +os.path.normpath(rb_deploy_get_include_dir()) +" "
+    else:
+        cf += " -I" +rb_install_get_include_dir() +" "
+
     return cf
 
 def rb_get_configure_options():

@@ -18,7 +18,7 @@ class Curl(Base):
                                 "curl-" +self.version)
 
     def build(self):
-        if rb_is_mac_gcc():
+        if rb_is_mac():
             opt = (
                 "--with-ssl=" +rb_install_get_dir(),
                 "--enable-static=yes",
@@ -72,5 +72,5 @@ class Curl(Base):
             id = rb_install_get_dir();
             rb_deploy_lib(id +"lib/libcurl.a")
             rb_deploy_lib(id +"lib/libcurl.4.dylib")
-            rb_deploy_headers(dir = id +"include/curl", subdir = "curl")
+            rb_deploy_headers(dir = id +"include/curl")
         

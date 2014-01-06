@@ -14,10 +14,11 @@ class AntTweakbar(Base):
         self.info = "AntTweakbar does not work on 10.9, we supply a patch"
 
     def download(self):
+        downloaded = rb_download_dir_exists(self)
         rb_git_clone(self, "git://git.code.sf.net/p/anttweakbar/code", self.version)
 
         # Apply patch on mac (dlopen doesn't seem to work)
-        if rb_is_mac():
+        if not downloaded and rb_is_mac():
             rb_copy_to_download_dir(self, "anttweakbar_macos_ldopen.patch")
             dd = rb_get_download_dir(self)
             cmd = (
@@ -44,7 +45,7 @@ class AntTweakbar(Base):
 
     def is_build(self):
         if rb_is_unix():
-            return rb_install_lib_file_exists("libAntTweakBar.a"
+            return rb_install_lib_file_exists("libAntTweakBar.a")
         else:
             rb_red_ln("@todo anttweakbar check if file exists on windows")
         return True
