@@ -63,6 +63,7 @@ from scripts.freenect import Freenect
 from scripts.opencv import OpenCV
 from scripts.mpg123 import MPG123
 from scripts.ao import AO
+from scripts.poly2tri import Poly2Tri
 from scripts.roxlu import Roxlu 
 
 from colorama import init, Fore, Back, Style
@@ -138,6 +139,7 @@ ins_freenect = Freenect()
 ins_opencv = OpenCV()
 ins_mpg123 = MPG123()
 ins_ao = AO()
+ins_poly2tri = Poly2Tri()
 ins_roxlu = Roxlu()
 
 
@@ -151,7 +153,7 @@ installers = [ins_glfw, ins_jansson, ins_jpeg, ins_tiff, ins_png, ins_zlib,
               ins_pango, ins_gnuplot, ins_samplerate, ins_nanomsg, ins_rapidxml,
               ins_libyuv, ins_glxw, ins_faac, ins_libav, ins_websockets,
               ins_libharu, ins_anttweakbar, ins_libusb, ins_freenect, ins_opencv,
-              ins_mpg123, ins_ao,
+              ins_mpg123, ins_ao, ins_poly2tri,
               ins_roxlu]
 
 
@@ -178,6 +180,8 @@ except getopt.GetoptError:
     sys.exit(2)
 
 # Handle arguments
+found_installers = []
+
 for opt, arg in opts:
     if opt in ("-a", "--arch"):
         if arg == "32":
@@ -186,7 +190,6 @@ for opt, arg in opts:
             config.arch = config.ARCH_M64
     elif opt in ("-s", "--script"):
         provided_scripts = arg.split(",")
-        found_installers = []
         #rb_yellow_ln(provided_scripts)
         for ins in installers:
             for asked_installer in provided_scripts:

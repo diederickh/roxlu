@@ -19,7 +19,6 @@ class AO(Base):
                                 "libao-" +self.version)
 
     def build(self):
-        return True
         if rb_is_unix():
             opts = ( "--enable-static=yes" )
             rb_build_with_autotools(self, opts)

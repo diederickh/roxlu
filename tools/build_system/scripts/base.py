@@ -259,6 +259,16 @@ def rb_git_clone(script, url, revision = None):
                cmd.append("git reset --hard " +revision)
         os.system(" && ".join(cmd))
 
+# clone the given url with mercurial
+def rb_hg_clone(script, url, revision = None):
+    if not os.path.exists(os.path.normpath(rb_get_download_dir(script))):
+        rb_ensure_download_dir(script)
+        cmd = ["cd " +rb_get_download_dir(script),
+               "hg clone " +url +" . "]
+        if revision:
+            rb_red_ln("@todo - implement cloning a specific hg version")
+        os.system(" && ".join(cmd))
+
 # checks out a svn url
 def rb_svn_checkout(script, url, revision = None):
     dd = rb_get_download_dir(script)
