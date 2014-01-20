@@ -16,7 +16,12 @@ class OpenCV(Base):
         rb_git_clone(self, "git@github.com:Itseez/opencv.git")
 
     def build(self):
-        opts = ["-DBUILD_SHARED_LIBS=0",
+
+        shared_libs = "0"
+        if rb_is_win:
+            shared_libs = "1"
+
+        opts = ["-DBUILD_SHARED_LIBS=" +shared_libs,
                 "-DBUILD_PACKAGE=0",
                 "-DBUILD_PERF_TESTS=0",
                 "-DBUILD_PNG=0",
