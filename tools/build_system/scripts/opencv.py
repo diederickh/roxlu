@@ -18,7 +18,7 @@ class OpenCV(Base):
     def build(self):
 
         shared_libs = "0"
-        if rb_is_win:
+        if rb_is_win():
             shared_libs = "1"
 
         opts = ["-DBUILD_SHARED_LIBS=" +shared_libs,

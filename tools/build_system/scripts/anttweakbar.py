@@ -38,6 +38,14 @@ class AntTweakbar(Base):
                 "make -f Makefile.osx"
                 )
             rb_execute_shell_commands(self, cmd, rb_get_autotools_environment_vars())
+        elif rb_is_linux():
+            dd = rb_get_download_dir(self)
+            cmd = (
+                "cd "+dd,
+                "cd src",
+                "make"
+                )
+            rb_execute_shell_commands(self, cmd, rb_get_autotools_environment_vars())
         else: 
             rb_red_ln("@todo build anttweakbar on non-unix")
 

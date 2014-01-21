@@ -142,7 +142,6 @@ ins_ao = AO()
 ins_poly2tri = Poly2Tri()
 ins_roxlu = Roxlu()
 
-
 installers = [ins_glfw, ins_jansson, ins_jpeg, ins_tiff, ins_png, ins_zlib, 
               ins_openssl, ins_lamemp3, ins_yasm, ins_uv, ins_curl, ins_pcre,
               ins_ogg, ins_vorbis, ins_theora, ins_speex, ins_mysqlc,
@@ -262,10 +261,12 @@ if task == TASK_BUILD:
         for r in rs:
             if not r.is_build():
                 rb_red_ln("Found dependency: "+r.name)
+                r.download()
                 r.build()
                 r.deploy()
 
         rb_yellow_ln("build: " +i.name)
+        i.download()
         i.build()
         i.deploy()
 

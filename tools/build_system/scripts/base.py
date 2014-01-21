@@ -568,7 +568,7 @@ def rb_deploy_get_dir():
     if config.build_type == config.BUILD_TYPE_DEBUG:
         flag = "d"
 
-    return config.deploy_prefix +"/" +rb_get_triplet() +flag + "/"
+    return config.deploy_prefix  +rb_get_triplet() +flag + "/"
 
 # if you library needs to find some includes, make sure to use this,
 # and not e.g. rb_get_include_dir
@@ -985,7 +985,11 @@ def rb_deploy_headers(dir, files = None, subdir = None):
         if not subdir == None:
             sd = subdir +"/"
 
-        d = rb_deploy_get_dir() +"/include/" +sd
+        if not rb_is_linux():
+            d = rb_deploy_get_dir() +"/include/" +sd
+        else:
+            d = rb_deploy_get_dir() + "/include/"
+
         rb_ensure_dir(d)
 
         #shutil.copyfile(os.path.normpath(dll), os.path.normpath(d))
@@ -995,6 +999,7 @@ def rb_deploy_headers(dir, files = None, subdir = None):
                 rb_yellow_ln("xcopy /y " +os.path.normpath(dir +"\*.h") +"  " +os.path.normpath(d))
                 rb_yellow_ln(dir)
             else:
+                rb_red_ln(os.path.normpath(copydir) +pathname  +" " +os.path.normpath(d))
                 os.system("cp -r " +os.path.normpath(copydir) +pathname +" " +os.path.normpath(d)) 
 
         else:

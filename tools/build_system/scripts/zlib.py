@@ -57,7 +57,6 @@ class ZLib(Base):
 
     def deploy(self):
 
-
         if rb_is_msvc():
             bd = rb_get_download_dir(self)
             rb_deploy_dll(bd +"zlib1.dll")

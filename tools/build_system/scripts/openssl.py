@@ -7,7 +7,7 @@ class OpenSSL(Base):
 
     def __init__(self):
         self.name = "openssl"
-        self.version = "1.0.1c"
+        self.version = "1.0.0l"
         self.compilers = [config.COMPILER_MAC_GCC, config.COMPILER_WIN_MSVC2010, config.COMPILER_WIN_MSVC2012, config.COMPILER_UNIX_GCC]        
         self.arch = [config.ARCH_M32, config.ARCH_M64]
         self.dependencies = ["zlib"]
@@ -70,9 +70,10 @@ class OpenSSL(Base):
                 "cd " +rb_get_download_dir(self), 
                 "./Configure --prefix=" +rb_install_get_dir() +" linux-x86_64 ",
                 "make clean",
-                "make install_sw"  # we need install_sw because the manual install fail on arch linux
+                "make" #  update 2014.01.20, this time the install failed on the manual.. it did create a library file though.  we need install_sw because the manual install fail on arch linux
             )
-            rb_execute_shell_commands(self, cmd);
+            #env = {"CFLAGS":"-fPIC"}
+            rb_execute_shell_commands(self, cmd)
 
     def is_build(self):
         if rb_is_unix():
@@ -91,9 +92,15 @@ class OpenSSL(Base):
             rb_deploy_lib(bde +"libeay32.lib")
             rb_deploy_lib(bde +"ssleay32.lib")
             rb_deploy_headers(dir = bd +"inc32/openssl/", subdir =  "openssl")
-        else:
+        elif rb_is_mac(): 
             rb_deploy_lib(rb_install_get_lib_file("libssl.a"))
             rb_deploy_lib(rb_install_get_lib_file("libcrypto.a"))
             rb_deploy_headers(dir = rb_install_get_include_dir() +"openssl")
+        elif rb_is_linux():
+            # The install script is buggy on linux
+            dd = rb_get_download_dir(self)
+            rb_deploy_lib(rb_download_get_file(self, "libssl.a"))
+            rb_deploy_lib(rb_download_get_file(self, "libcrypto.a"))
+            rb_deploy_headers(dir = dd +"/include/openssl")
 
         

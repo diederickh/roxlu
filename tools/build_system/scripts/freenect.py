@@ -6,7 +6,7 @@ class Freenect(Base):
     
     def __init__(self):
         self.name = "freenect"
-        self.version = ""
+        self.version = "c55f3c94c422afc9f4c3c34327da9526b44f32a2"
         self.compilers = [config.COMPILER_MAC_GCC, config.COMPILER_MAC_CLANG]
         self.arch = [config.ARCH_M32, config.ARCH_M64]
         self.dependencies = ["libusb"]

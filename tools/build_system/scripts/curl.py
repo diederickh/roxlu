@@ -5,7 +5,7 @@ from base import *
 class Curl(Base):
     def __init__(self):
         self.name = "curl"
-        self.version = "7.31.0"
+        self.version = "7.34.0"
         self.compilers = [config.COMPILER_WIN_MSVC2010, config.COMPILER_WIN_MSVC2012, config.COMPILER_MAC_GCC]
         self.arch = [config.ARCH_M32, config.ARCH_M64]
         self.dependencies = ["openssl", "zlib"]
@@ -18,10 +18,11 @@ class Curl(Base):
                                 "curl-" +self.version)
 
     def build(self):
-        if rb_is_mac():
+        if rb_is_unix():
             opt = (
-                "--with-ssl=" +rb_install_get_dir(),
+                "--with-ssl=" +rb_deploy_get_dir(),
                 "--enable-static=yes",
+                "--enable-shared=no",
                 "--disable-ldaps",
                 "--disable-ldap",
                 "--disable-rtsp",
@@ -30,11 +31,14 @@ class Curl(Base):
                 "--disable-pop3",
                 "--disable-imap",
                 "--disable-smtp",
+                "--without-librtmp",
+                "--without-libssh2",
                 "--disable-gopher",
                 "--without-axtls",
                 "--disable-ares"
                 )
-            rb_build_with_autotools(self, " ".join(opt));
+            env = {"LIBS":"-ldl"} # ssl needs this
+            rb_build_with_autotools(self, " ".join(opt), environmentVars=env);
             
         elif rb_is_msvc():
 
