@@ -38,14 +38,8 @@ class ZLib(Base):
                 )
             rb_execute_shell_commands(self, cmd)
         elif rb_is_msvc():
-            db = rb_get_download_dir(self)
-            cmd = (
-                "call " +rb_msvc_get_setvars(),
-                "cd " +db,
-                "nmake -f win32/Makefile.msc clean",
-                "nmake -f win32/Makefile.msc LOC=\"-DASMV -DASMINF\"  OBJA=\"inffas32.obj match686.obj\""
-            )
-            rb_execute_shell_commands(self, cmd)
+            rb_cmake_configure(self)
+            rb_cmake_build(self)
 
     def is_build(slef):
         if rb_is_unix():
@@ -58,12 +52,11 @@ class ZLib(Base):
     def deploy(self):
 
         if rb_is_msvc():
-            bd = rb_get_download_dir(self)
-            rb_deploy_dll(bd +"zlib1.dll")
-            #rb_deploy_lib(bd +"zlib.lib")  # we prefer DLLs
-            rb_deploy_lib(bd +"zdll.lib")
-            rb_deploy_header(bd +"zlib.h")
-            rb_deploy_header(bd +"zconf.h")
+            debug_flag = "d" if rb_is_debug() else ""
+            rb_deploy_lib(rb_install_get_lib_file("zlib" +debug_flag +".lib"))
+            rb_deploy_dll(rb_install_get_bin_file("zlib" +debug_flag +".dll"))
+            rb_deploy_header(rb_install_get_include_file("zconf.h"))
+            rb_deploy_header(rb_install_get_include_file("zlib.h"))
         else:
             rb_deploy_lib(rb_install_get_lib_file("libz.a"))
             rb_deploy_header(rb_install_get_include_file("zlib.h"))

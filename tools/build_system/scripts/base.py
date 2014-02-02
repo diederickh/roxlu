@@ -539,7 +539,7 @@ def rb_install_get_dir():
 
 # get the full path to a lib file for the current install/build dir
 def rb_install_get_lib_file(filename):
-    return os.path.normpath(rb_install_get_dir() +"lib/" +filename)
+    return rb_install_get_lib_dir() +filename
 
 def rb_install_lib_file_exists(filename):
     return os.path.exists(os.path.normpath(rb_install_get_lib_file(filename)))
@@ -556,7 +556,8 @@ def rb_install_bin_file_exists(filename):
 
 # get the full path to a header file for the current install/build dir
 def rb_install_get_include_file(filename):
-    return os.path.normpath(rb_install_get_dir() + "include/" +filename)
+    return rb_norm_path(rb_install_get_dir() + "include/") +filename
+    #return os.path.normpath(rb_install_get_dir() + "include/" +filename)
 
 # the deploy dir is where all the compiled files are copied to using the script.copy() function
 # this is different from the rb_install_get_dir(), as the rb_install_get_dir() is used as 
@@ -573,26 +574,30 @@ def rb_deploy_get_dir():
 # if you library needs to find some includes, make sure to use this,
 # and not e.g. rb_get_include_dir
 def rb_deploy_get_include_dir():
-    return os.path.normpath(rb_deploy_get_dir() +"include") +"/"
+    return rb_norm_path(rb_deploy_get_dir() +"include") 
 
 # if you need to add an extra library path in your build() function, 
 # use this function to get the correct path for the current build
 def rb_deploy_get_lib_dir():
-    return rb_deploy_get_dir() +"lib/"
+    return rb_norm_path(rb_deploy_get_dir() +"lib/")
     
 # get the include dir where all the headers are saved for the compiled scripts
 # DO NOT USE FOR ADDING INCLUDE DIRS IN YOUR build() FUNCTION, your build needs to use the deployed dirs
 def rb_install_get_include_dir():
-    return rb_install_get_dir() +"/include/"
+    return rb_norm_path(rb_install_get_dir() +"/include/")
 
 def rb_get_include_dir():
     rb_red_ln("THIS SHOULD BE RENAMED TO rb_install_get_include_dir")
     return rb_install_get_dir() +"/include/"
 
+# The os.path.normpath() removes the trailing slash; this function adds it.
+def rb_norm_path(pathname):
+    return os.path.normpath(pathname) +("\\" if rb_is_win() else "/")
+
 # get the lib dir where all the libs are saved for the compiled scripts
 # DO NOT USE FOR ADDING LIB DIRS IN YOUR build() FUNCTION, your build needs to use the deployed dirs
 def rb_install_get_lib_dir():
-    return rb_install_get_dir() +"/lib/"
+    return rb_norm_path(rb_install_get_dir() +"/lib/")
 
 def rb_install_get_bin_dir():
     return rb_install_get_dir() +"/bin/"
@@ -804,7 +809,6 @@ def rb_get_export_cmd(name, value):
 
 # environmentVars: dictionary with environment vars we set
 def rb_execute_shell_commands(script, commands, environmentVars = None):
-    
     cmd = rb_merge_shell_commands_with_envvars(commands, environmentVars)
 
     # create the shell script
@@ -1363,9 +1367,10 @@ def rb_cmake_build(script, target = "install"):
         cmd += " --config Debug "
         
     if rb_is_msvc():
+        rb_red_ln("2014.02.02 - roxlu: I disabled the call to the rb_msvc_get_setvars() while testing 32/64 builds")
         commands = [
             "cd " +rb_get_download_dir(script) +rb_get_cmake_configure_dir(), 
-            "call " +os.path.normpath(rb_msvc_get_setvars()),
+             # "call " +os.path.normpath(rb_msvc_get_setvars()),
             cmd
         ]
         rb_execute_shell_commands(script, commands)
@@ -1391,11 +1396,11 @@ def rb_cmake_configure(script, opts = None):
     cmake_config = rb_cmake_create_configure_command(script, opts)
     cmake_config.append("..")
     cmake_command = " ".join(cmake_config)
-
+    
     # configure for msvc
     if rb_is_msvc():
         cmd = [
-            "call " +os.path.normpath(rb_msvc_get_setvars()),
+            #"call " +os.path.normpath(rb_msvc_get_setvars()),
             "cd " +dcmake,
             cmake_command
         ]

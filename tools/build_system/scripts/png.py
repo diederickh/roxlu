@@ -35,35 +35,22 @@ class PNG(Base):
             #rb_build_with_autotools(self, " ".join(ef))
 
         elif rb_is_msvc():
-
-            # copy our custom project
-            dd = rb_get_download_dir(self)
-            rb_msvc_copy_custom_project(self, dd +"/projects/" +rb_get_compiler_shortname()) 
-
-            # copy the default config
-            rb_msvc_setup_build_environment()
-            rb_download_dir_copy_file_internal(self, "scripts/pnglibconf.h.prebuilt", "pnglibconf.h")
-
-            # build through command line
-            cmd = rb_msvc_get_environment_vars()
-            cmd += (
-                "cd " +dd +"/projects/" +rb_get_compiler_shortname(),
-                "call " +rb_msvc_get_setvars(), 
-                "SET CL=/I" +rb_deploy_get_include_dir() +" ",
-                "SET LINK=" +rb_deploy_get_lib_file("zdll.lib"),
-                "msbuild.exe vstudio.sln /t:libpng " +rb_msvc_get_msbuild_type_flag()
-            )
-            rb_execute_shell_commands(self, cmd)
-
-            
+            debug_flag = "d" if rb_is_debug() else ""
+            opts = [ 
+                "-DZLIB_LIBRARY=" +rb_deploy_get_lib_file("zlib" +debug_flag +".lib"),
+                "-DZLIB_INCLUDE_DIR=" +rb_deploy_get_include_dir()
+                ]
+            rb_cmake_configure(self, opts)
+            rb_cmake_build(self)
 
     def deploy(self):
         if rb_is_msvc():
-            dd = rb_get_download_dir(self)
-            bd = dd +"/projects/" +rb_get_compiler_shortname() +"/" +rb_msvc_get_build_type_string() 
-            rb_deploy_dll(bd +"/libpng16.dll")
-            rb_deploy_lib(bd +"/libpng16.lib")
-            rb_deploy_headers(dd, ["png.h", "pngconf.h", "pnglibconf.h"])
+            debug_flag = "d" if rb_is_debug() else ""
+            rb_deploy_lib(rb_install_get_lib_file("libpng16" +debug_flag +".lib"))
+            rb_deploy_dll(rb_install_get_bin_file("libpng16" +debug_flag +".dll"))
+            rb_deploy_header(rb_install_get_include_file("png.h"))
+            rb_deploy_header(rb_install_get_include_file("pngconf.h"))
+            rb_deploy_header(rb_install_get_include_file("pnglibconf.h"))
         elif rb_is_mac():
             id = rb_install_get_dir()
             rb_deploy_lib(rb_install_get_lib_file("libpng16.a"))

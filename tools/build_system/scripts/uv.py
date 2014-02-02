@@ -51,28 +51,11 @@ class UV(Base):
 
             rb_execute_shell_commands(self, cmd)
 
-
-
         elif rb_is_msvc():
+            rb_copy_to_download_dir(self, "CMakeLists.txt")
             dd = rb_get_download_dir(self)
-
-            # libuv checks this environment variable that will compile with vs11 instead of vs10, therefore
-            # we have to unset it.
-            vs11comtools_copy = os.environ["VS110COMNTOOLS"];
-            if rb_is_vs2010():
-                os.environ["VS110COMNTOOLS"] = "";
-
-            cmd = (
-                "cd " +dd,
-                "call " +rb_msvc_get_setvars(),
-                "call vcbuild.bat release", # maybe add "x86 shared"
-                "msbuild.exe uv.sln /t:libuv " +rb_msvc_get_msbuild_type_flag()
-            )
-            rb_execute_shell_commands(self, cmd)
-            
-            # and set back...
-            if rb_is_vs2010():
-                os.environ["VS110COMNTOOLS"] = vs11comtools_copy;
+            rb_cmake_configure(self)
+            rb_cmake_build(self)
 
         elif rb_is_unix():
             cmd = (
@@ -122,11 +105,12 @@ class UV(Base):
     
     def deploy(self):
         if rb_is_msvc():
-            dd = rb_get_download_dir(self)
-            cd = dd +"/" +rb_msvc_get_build_type_string() +"/"
-            rb_deploy_lib(cd +"libuv.lib")
-            rb_deploy_dll(cd +"libuv.dll")
-            rb_deploy_headers(dd +"/include/")
+            rb_deploy_lib(rb_install_get_lib_file("libuv.lib"))
+            rb_deploy_dll(rb_install_get_bin_file("libuv.dll"))
+            rb_deploy_header(rb_install_get_include_file("uv.h"))
+            rb_deploy_header(rb_install_get_include_file("uv-errno.h"))
+            rb_deploy_header(rb_install_get_include_file("uv-win.h"))
+            rb_deploy_header(rb_install_get_include_file("stdint-msvc2008.h"))
         elif rb_is_mac():
             self.deploy_lib_if_exists("libuv.a")
             rb_deploy_header(rb_download_get_file(self, "include/pthread-fixes.h"))
