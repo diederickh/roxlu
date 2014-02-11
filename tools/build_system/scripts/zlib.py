@@ -45,7 +45,8 @@ class ZLib(Base):
         if rb_is_unix():
             return rb_install_lib_file_exists("libz.a")
         elif rb_is_win():
-            return rb_deploy_lib_file_exists("zdll.lib")
+            debug_flag = "d" if rb_is_debug() else ""
+            return rb_deploy_lib_file_exists("zlibstatic" +debug_flag +".lib")
         else:
             rb_red_ln("Cannot check if the lib is build on this platform")
 

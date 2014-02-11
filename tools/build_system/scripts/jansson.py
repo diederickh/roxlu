@@ -21,8 +21,12 @@ class Jansson(Base):
         # MAC 
         if rb_is_unix():
             rb_build_with_autotools(self)
-
+        elif rb_is_win():
+            rb_copy_to_download_dir(self, "CMakeLists.txt")
+            rb_cmake_configure(self)
+            rb_cmake_build(self)
         # WIN VS2010
+        """
         elif rb_is_vs2010():
 
             bd = rb_get_download_path(self) +"win32/vs2010"
@@ -54,7 +58,7 @@ class Jansson(Base):
             )
 
             rb_execute_shell_commands(cmd)
-
+        """
     def is_build(self):
         if rb_is_unix():
             return rb_install_lib_file_exists("libjansson.a")
@@ -63,17 +67,11 @@ class Jansson(Base):
 
     def deploy(self):
         if rb_is_win():
-            dp = rb_get_download_path(self)
-            sd = rb_get_download_path(self) +"win32/" \
-                 +rb_get_compiler_shortname() \
-                 +"/Output/" \
-                 +rb_msvc_get_build_type_string()
- 
-            rb_deploy_dll(sd +"/jansson.dll")
-            rb_deploy_lib(sd +"/jansson.lib")
-            rb_deploy_header(dp +"/src/jansson.h")
-            rb_deploy_header(dp +"/src/jansson_config.h")
-            
+            rb_deploy_lib(rb_install_get_lib_file("jansson.lib"))
+            rb_deploy_lib(rb_install_get_lib_file("jansson_static.lib"))
+            rb_deploy_header(rb_install_get_include_file("jansson.h"))
+            rb_deploy_header(rb_install_get_include_file("jansson_config.h"))
+            rb_deploy_dll(rb_install_get_bin_file("jansson.dll"))
         else:
             rb_deploy_lib(rb_install_get_lib_file("libjansson.a"))
             rb_deploy_lib(rb_install_get_lib_file("libjansson.4.dylib"))
