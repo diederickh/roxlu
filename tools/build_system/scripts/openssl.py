@@ -7,7 +7,7 @@ class OpenSSL(Base):
 
     def __init__(self):
         self.name = "openssl"
-        self.version = "1.0.0l"
+        self.version = "1.0.0f" # version 1.0.0l does not compile on mac 32bit
         self.compilers = [config.COMPILER_MAC_GCC, config.COMPILER_WIN_MSVC2010, config.COMPILER_WIN_MSVC2012, config.COMPILER_UNIX_GCC]        
         self.arch = [config.ARCH_M32, config.ARCH_M64]
         self.dependencies = ["zlib"]
@@ -29,7 +29,7 @@ class OpenSSL(Base):
 
             cmd = ( 
                 "set -x && cd "+rb_get_download_dir(self),
-                "./Configure --prefix=" +rb_install_get_dir() +" " +platform,
+               "./Configure --prefix=" +rb_install_get_dir() +" " +platform,
                 "make clean",
                 "make install",
             )

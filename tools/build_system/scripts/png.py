@@ -23,13 +23,14 @@ class PNG(Base):
                   "--with-sysroot=" +rb_install_get_dir())
 
             dd = rb_get_download_dir(self)
+
             cmd = (
                 "cd " +dd,
                 "./configure "+ rb_get_configure_prefix_flag(),
                 "make clean && make && make install"
                 )
 
-            rb_execute_shell_commands(self, cmd)
+            rb_execute_shell_commands(self, cmd, rb_get_autotools_environment_vars())
 
             # something goes wrong with zlib version; the detected version is old/wrong
             #rb_build_with_autotools(self, " ".join(ef))
