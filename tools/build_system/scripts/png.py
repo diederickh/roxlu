@@ -45,8 +45,10 @@ class PNG(Base):
 
     def deploy(self):
         if rb_is_msvc():
+            # the dll debug lib crashes on windows, use the static ones
             debug_flag = "d" if rb_is_debug() else ""
             rb_deploy_lib(rb_install_get_lib_file("libpng16" +debug_flag +".lib"))
+            rb_deploy_lib(rb_install_get_lib_file("libpng16_static" +debug_flag +".lib"))
             rb_deploy_dll(rb_install_get_bin_file("libpng16" +debug_flag +".dll"))
             rb_deploy_header(rb_install_get_include_file("png.h"))
             rb_deploy_header(rb_install_get_include_file("pngconf.h"))

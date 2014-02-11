@@ -54,6 +54,7 @@ class ZLib(Base):
         if rb_is_msvc():
             debug_flag = "d" if rb_is_debug() else ""
             rb_deploy_lib(rb_install_get_lib_file("zlib" +debug_flag +".lib"))
+            rb_deploy_lib(rb_install_get_lib_file("zlibstatic" +debug_flag +".lib"))
             rb_deploy_dll(rb_install_get_bin_file("zlib" +debug_flag +".dll"))
             rb_deploy_header(rb_install_get_include_file("zconf.h"))
             rb_deploy_header(rb_install_get_include_file("zlib.h"))
