@@ -64,6 +64,9 @@ from scripts.opencv import OpenCV
 from scripts.mpg123 import MPG123
 from scripts.ao import AO
 from scripts.poly2tri import Poly2Tri
+from scripts.cgal import CGal
+from scripts.gmp import GMP
+from scripts.mpfr import MPFR
 from scripts.roxlu import Roxlu 
 
 from colorama import init, Fore, Back, Style
@@ -140,6 +143,9 @@ ins_opencv = OpenCV()
 ins_mpg123 = MPG123()
 ins_ao = AO()
 ins_poly2tri = Poly2Tri()
+ins_cgal = CGal()
+ins_gmp = GMP()
+ins_mpfr = MPFR()
 ins_roxlu = Roxlu()
 
 installers = [ins_glfw, ins_jansson, ins_jpeg, ins_tiff, ins_png, ins_zlib, 
@@ -152,7 +158,7 @@ installers = [ins_glfw, ins_jansson, ins_jpeg, ins_tiff, ins_png, ins_zlib,
               ins_pango, ins_gnuplot, ins_samplerate, ins_nanomsg, ins_rapidxml,
               ins_libyuv, ins_glxw, ins_faac, ins_libav, ins_websockets,
               ins_libharu, ins_anttweakbar, ins_libusb, ins_freenect, ins_opencv,
-              ins_mpg123, ins_ao, ins_poly2tri,
+              ins_mpg123, ins_ao, ins_poly2tri, ins_cgal, ins_gmp, ins_mpfr,
               ins_roxlu]
 
 
