@@ -13,10 +13,10 @@ class Websockets(Base):
         self.info = ""
 
     def download(self):
-        rb_git_clone(self, "git://git.libwebsockets.org/libwebsockets");
+        #rb_git_clone(self, "git://git.libwebsockets.org/libwebsockets"); # doesn't work; cannot find, looks like wrong dns configuratio
+        rb_git_clone(self, "https://github.com/warmcat/libwebsockets")
 
     def build(self):
-        return True
         if rb_is_win():
             # SSL build gives unresolved symbols
             debug_flag = "d" if rb_is_debug() else ""
@@ -46,6 +46,7 @@ class Websockets(Base):
             rb_deploy_dll(rb_install_get_bin_file("websockets.dll"))
             rb_deploy_header(rb_install_get_include_file("libwebsockets.h"))
             rb_deploy_header(rb_install_get_include_file("websock-w32.h"))
+            rb_deploy_header(rb_install_get_include_file("gettimeofday.h"))
             rb_deploy_lib(rb_install_get_lib_file("websockets.lib"))
             rb_deploy_lib(rb_install_get_lib_file("websockets_static.lib"))
         else:
