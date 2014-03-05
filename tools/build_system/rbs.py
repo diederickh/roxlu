@@ -67,6 +67,12 @@ from scripts.poly2tri import Poly2Tri
 from scripts.cgal import CGal
 from scripts.gmp import GMP
 from scripts.mpfr import MPFR
+from scripts.openni2 import OpenNI2
+from scripts.poppler import Poppler
+from scripts.fontconfig import FontConfig
+from scripts.fftw import FFTW
+from scripts.rtaudio import RTAudio
+from scripts.ccv import CCV
 from scripts.roxlu import Roxlu 
 
 from colorama import init, Fore, Back, Style
@@ -146,6 +152,12 @@ ins_poly2tri = Poly2Tri()
 ins_cgal = CGal()
 ins_gmp = GMP()
 ins_mpfr = MPFR()
+ins_openni2 = OpenNI2()
+ins_poppler = Poppler()
+ins_fontconfig = FontConfig()
+ins_fftw = FFTW()
+ins_rtaudio = RTAudio()
+ins_ccv = CCV()
 ins_roxlu = Roxlu()
 
 installers = [ins_glfw, ins_jansson, ins_jpeg, ins_tiff, ins_png, ins_zlib, 
@@ -159,6 +171,7 @@ installers = [ins_glfw, ins_jansson, ins_jpeg, ins_tiff, ins_png, ins_zlib,
               ins_libyuv, ins_glxw, ins_faac, ins_libav, ins_websockets,
               ins_libharu, ins_anttweakbar, ins_libusb, ins_freenect, ins_opencv,
               ins_mpg123, ins_ao, ins_poly2tri, ins_cgal, ins_gmp, ins_mpfr,
+              ins_openni2, ins_poppler, ins_fontconfig, ins_fftw, ins_rtaudio, ins_ccv,
               ins_roxlu]
 
 

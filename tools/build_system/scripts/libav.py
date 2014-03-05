@@ -24,6 +24,7 @@ class LibAV(Base):
                 "cd " +dd,
                 "./configure --enable-static \
                              --enable-gpl \
+                             --enable-libx264 \
                              --enable-nonfree" \
                 +rb_get_configure_flags(), 
                 "make clean",

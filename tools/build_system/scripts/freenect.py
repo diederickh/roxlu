@@ -16,7 +16,11 @@ class Freenect(Base):
         rb_git_clone(self, "git://github.com/OpenKinect/libfreenect.git")
 
     def build(self):
-        rb_cmake_configure(self)
+        opts = [ 
+            "-DBUILD_OPENNI2_DRIVER=ON",
+            "-DLIBUSB_1_INCLUDE_DIRS=" +rb_install_get_include_dir()
+        ]
+        rb_cmake_configure(self, opts)
         rb_cmake_build(self)
         return True
 

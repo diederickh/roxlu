@@ -640,6 +640,11 @@ def rb_get_cflags():
     if rb_is_debug():
         cf += " -g -O0 "
         
+    if rb_is_win():
+        cf += " -I" +os.path.normpath(rb_deploy_get_include_dir()) +" "
+    else:
+        cf += " -I" +rb_install_get_include_dir() +" "
+
     return cf
 
 def rb_get_cc():
@@ -684,7 +689,9 @@ def rb_get_ldflags():
 
     return ld
 
+# @todo -> I guess this should be CFLAGS (?)
 def rb_get_cppflags():
+    
     cf = ""
     if rb_is_debug():
         cf = "-DDEBUG "
@@ -727,7 +734,7 @@ def rb_get_autotools_environment_vars():
 
 
     if rb_is_mac():
-        vars['PATH'] ="\"" +rb_install_get_bin_dir() +":${PATH}\""
+        vars['PATH'] ="\"" +rb_install_get_bin_dir() +":" +rb_install_get_include_dir() +":${PATH}\""
 #    vars['PKG_CONFIG_PATH'] = "\"" +rb_install_get_lib_dir() +"pkgconfig\""
 
     return vars

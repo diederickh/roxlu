@@ -10,7 +10,7 @@ class Cairo(Base):
         self.compilers = [config.COMPILER_MAC_GCC, config.COMPILER_MAC_CLANG]
         self.arch = [config.ARCH_M32, config.ARCH_M64]
         if rb_is_unix():
-            self.dependencies = ["automake", "autoconf", "libtool"]
+            self.dependencies = ["automake", "autoconf", "libtool", "pixman", "freetype"]
         else:
             self.dependencies = []
 
@@ -22,8 +22,15 @@ class Cairo(Base):
             "cd " +rb_get_download_dir(self),
             "./autogen.sh"
             ]
-        rb_execute_shell_commands(self, cmd, rb_get_autotools_environment_vars())
-        rb_build_with_autotools(self)
+
+        env = rb_get_autotools_environment_vars()
+        env["POPPLER_CFLAGS"] = "-I" +rb_install_get_include_dir()
+        env["POPPLER_LIBS"] = "-lpoppler"  
+        #env = { "POPPLER_CFLAGS":"-I" +rb_install_get_include_dir(), "POPPLER_LIBS" :"-lpoppler" } 
+        rb_execute_shell_commands(self, cmd, env)
+        
+        
+        rb_build_with_autotools(self, environmentVars = env)
 
     def is_build(self):
         if rb_is_unix():
