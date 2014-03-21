@@ -116,6 +116,9 @@ def rb_get_download_dir(script = None):
     else:
         return os.path.abspath(config.download_dir +"/" +script.name) +"/"
 
+# get a file path from the download dir
+def rb_get_download_file(script, filename):
+    return os.path.abspath(rb_get_download_dir(script) +"/" +filename)
 
 # check if the download dir exist for the given script
 def rb_download_dir_exists(script):
