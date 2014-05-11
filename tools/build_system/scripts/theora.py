@@ -11,15 +11,15 @@ class Theora(Base):
         self.arch = [config.ARCH_M32, config.ARCH_M64]
 
         if rb_is_unix():
-            self.dependencies = ["automake","autoconf","libtool","vorbis","ogg"]
+            self.dependencies = ["automake","autoconf","libtool","vorbis","ogg", "png"]
         elif rb_is_win():
             self.dependencies = ["vorbis","ogg"]
 
         self.info = "We use the svn version; which contains a valid VS2010 build file"
         
     def download(self): 
-        rb_svn_checkout(self, "http://svn.xiph.org/trunk/theora") 
-        # , self.version)
+        rb_git_clone(self, "https://git.xiph.org/mirrors/theora.git")
+        #rb_svn_checkout(self, "http://svn.xiph.org/trunk/theora")  # on linux this didn't work
 
     def build(self):
         if rb_is_mac():
@@ -43,6 +43,14 @@ class Theora(Base):
                 opts = ("--exec_prefix=" +rb_install_get_dir() )
 
             rb_build_with_autotools(self, opts, environmentVars = envvars)
+        elif rb_is_linux():
+            cmds = [
+                "export PATH=" +rb_install_get_bin_dir() +":${PATH}",
+                "cd " +rb_get_download_dir(self),
+                "./autogen.sh"
+                ]
+            rb_execute_shell_commands(self, cmds)
+            rb_build_with_autotools(self, flags = "--disable-examples") 
 
         elif rb_is_msvc():
 
@@ -75,6 +83,11 @@ class Theora(Base):
             rb_deploy_dll(dd +"libtheora.dll")
             rb_deploy_lib(dd +"libtheora.lib")
             rb_deploy_headers(dir = rb_get_download_dir(self) +"/include/theora", subdir =  "theora")
+        elif rb_is_linux():
+            rb_deploy_lib(rb_install_get_lib_file("libtheora.a"))
+            rb_deploy_lib(rb_install_get_lib_file("libtheoraenc.a"))
+            rb_deploy_lib(rb_install_get_lib_file("libtheoradec.a"))
+            rb_deploy_headers(dir = rb_install_get_include_dir() +"theora", subdir = "theora")
         elif rb_is_mac():
             rb_deploy_lib(rb_install_get_lib_file("libtheora.a"))
             rb_deploy_lib(rb_install_get_lib_file("libtheoraenc.a"))

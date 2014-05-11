@@ -18,7 +18,7 @@ class Ogg(Base):
                                 "libogg-" +self.version +".tar.gz", 
                                 "libogg-" +self.version)
     def build(self):
-        if rb_is_mac():
+        if rb_is_unix():
             rb_build_with_autotools(self);
         elif rb_is_msvc():
 
@@ -60,6 +60,9 @@ class Ogg(Base):
         elif rb_is_mac():
             rb_deploy_lib(rb_install_get_lib_file("libogg.a"))
             rb_deploy_lib(rb_install_get_lib_file("libogg.0.dylib"))
+            rb_deploy_headers(dir = rb_install_get_include_dir() +"ogg", subdir = "ogg")
+        elif rb_is_linux():
+            rb_deploy_lib(rb_install_get_lib_file("libogg.a"))
             rb_deploy_headers(dir = rb_install_get_include_dir() +"ogg", subdir = "ogg")
 
                 

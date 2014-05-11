@@ -1372,7 +1372,7 @@ def rb_cmake_build(script, target = "install"):
     
     # Create the cmake command
     cmd = rb_cmake_get_executable() +" --build . --target  " +target
-    if config.build_type == config.BUILD_TYPE_RELEASE: 
+    if config.buildtype == config.BUILD_TYPE_RELEASE: 
         cmd += " --config Release "
     elif config.build_type == config.BUILD_TYPE_DEBUG:
         cmd += " --config Debug "

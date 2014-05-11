@@ -17,7 +17,7 @@ class Vorbis(Base):
                                 "libvorbis-" +self.version +".tar.gz", 
                                 "libvorbis-" +self.version)
     def build(self):
-        if rb_is_mac():
+        if rb_is_unix():
             rb_build_with_autotools(self)
         elif rb_is_msvc():
 
@@ -54,7 +54,6 @@ class Vorbis(Base):
             rb_deploy_dll(dd +"libvorbis.dll")
             rb_deploy_lib(dd +"libvorbis.lib")
             rb_deploy_headers(dir = rb_get_download_dir(self) +"/include/vorbis", subdir =  "vorbis")
-
         elif rb_is_mac():
             rb_deploy_lib(rb_install_get_lib_file("libvorbis.a"))
             rb_deploy_lib(rb_install_get_lib_file("libvorbisenc.a"))
@@ -62,6 +61,11 @@ class Vorbis(Base):
             rb_deploy_lib(rb_install_get_lib_file("libvorbis.0.dylib"))
             rb_deploy_lib(rb_install_get_lib_file("libvorbisenc.2.dylib"))
             rb_deploy_lib(rb_install_get_lib_file("libvorbisfile.3.dylib"))
+            rb_deploy_headers(dir = rb_install_get_include_dir() +"vorbis", subdir = "vorbis")
+        elif rb_is_linux():
+            rb_deploy_lib(rb_install_get_lib_file("libvorbis.a"))
+            rb_deploy_lib(rb_install_get_lib_file("libvorbisenc.a"))
+            rb_deploy_lib(rb_install_get_lib_file("libvorbisfile.a"))
             rb_deploy_headers(dir = rb_install_get_include_dir() +"vorbis", subdir = "vorbis")
 
                 
