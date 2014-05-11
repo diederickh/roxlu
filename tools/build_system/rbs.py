@@ -75,6 +75,13 @@ from scripts.rtaudio import RTAudio
 from scripts.ccv import CCV
 from scripts.cubeb import Cubeb
 from scripts.libre import LibRE
+from scripts.baresip import Baresip
+from scripts.libnice import LibNice
+from scripts.libvpx import LibVPX
+from scripts.sdl2 import SDL2
+from scripts.sdl import SDL
+from scripts.daala import Daala
+from scripts.oggz import Oggz
 from scripts.roxlu import Roxlu 
 
 from colorama import init, Fore, Back, Style
@@ -162,6 +169,13 @@ ins_rtaudio = RTAudio()
 ins_ccv = CCV()
 ins_cubeb = Cubeb()
 ins_libre = LibRE()
+ins_baresip = Baresip()
+ins_libnice = LibNice()
+ins_libvpx = LibVPX()
+ins_sdl2 = SDL2()
+ins_sdl = SDL()
+ins_daala = Daala()
+ins_oggz = Oggz()
 ins_roxlu = Roxlu()
 
 installers = [ins_glfw, ins_jansson, ins_jpeg, ins_tiff, ins_png, ins_zlib, 
@@ -176,7 +190,8 @@ installers = [ins_glfw, ins_jansson, ins_jpeg, ins_tiff, ins_png, ins_zlib,
               ins_libharu, ins_anttweakbar, ins_libusb, ins_freenect, ins_opencv,
               ins_mpg123, ins_ao, ins_poly2tri, ins_cgal, ins_gmp, ins_mpfr,
               ins_openni2, ins_poppler, ins_fontconfig, ins_fftw, ins_rtaudio, ins_ccv,
-              ins_cubeb, ins_libre,
+              ins_cubeb, ins_libre, ins_baresip, ins_libnice, ins_libvpx, ins_sdl2,
+              ins_daala, ins_sdl, ins_oggz,
               ins_roxlu]
 
 

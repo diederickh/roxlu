@@ -18,7 +18,8 @@ class Theora(Base):
         self.info = "We use the svn version; which contains a valid VS2010 build file"
         
     def download(self): 
-        rb_svn_checkout(self, "http://svn.xiph.org/trunk/theora", self.version)
+        rb_svn_checkout(self, "http://svn.xiph.org/trunk/theora") 
+        # , self.version)
 
     def build(self):
         if rb_is_mac():

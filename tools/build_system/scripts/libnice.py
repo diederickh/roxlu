@@ -2,20 +2,20 @@ import os
 import config
 from base import *
 
-class LibRE(Base):
+class LibNice(Base):
     def __init__(self):
-        self.name = "libre"
-        self.version = "0.4.7"
+        self.name = "libnice"
+        self.version = "0.1.5"
         self.compilers = [config.COMPILER_MAC_GCC]
         self.arch = [config.ARCH_M32, config.ARCH_M64]
-        self.dependencies = []
-        self.info = "only compiled on mac - rtp/rtsp/stun/ice lib"
+        self.dependencies = ["glib"]
+        self.info = "libnice"
 
     def download(self): 
         rb_download_and_extract(self, 
-                                "http://www.creytiv.com/pub/re-" +self.version +".tar.gz",
-                                "re-" +self.version +".tar.gz", 
-                                "re-" +self.version)
+                               "http://nice.freedesktop.org/releases/libnice-" +self.version +".tar.gz",
+                                "libnice-" +self.version +".tar.gz", 
+                                "libnice-" +self.version)
         return True
 
     def build(self):
@@ -29,6 +29,7 @@ class LibRE(Base):
         return False
 
     def deploy(self):
+        return True
         if rb_is_mac():
             rb_deploy_lib(rb_get_download_file(self, "libre.a"))
         rb_deploy_headers(dir = rb_get_download_dir(self) +"include/")

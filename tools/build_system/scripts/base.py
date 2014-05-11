@@ -617,6 +617,7 @@ def rb_get_lib_dir():
 def rb_get_cxxflags():
     # i386 is used by linker; c/cpp flags use -m32, -m64
     cf = ""
+    
     if config.arch == config.ARCH_M32:
         cf = "-m32"
     elif config.arch == config.ARCH_M64:
