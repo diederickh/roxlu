@@ -52,8 +52,12 @@ class Theora(Base):
             rb_execute_shell_commands(self, cmds)
             rb_build_with_autotools(self, flags = "--disable-examples") 
 
-        elif rb_is_msvc():
+        elif rb_is_win():
+            rb_copy_to_download_dir(self, "CMakeLists.txt")
+            rb_cmake_configure(self)
+            rb_cmake_build(self)
 
+            """
             rb_download_dir_copy_internal(self, "win32/VS2010", "win32/VS2012")
             rb_vs2010_upgrade_to_vs2012(self, rb_get_download_dir(self) +"win32/VS2012/", "libtheora_dynamic.sln")
 
@@ -66,23 +70,28 @@ class Theora(Base):
             )
 
             rb_execute_shell_commands(self, cmd)
+            """
 
     def is_build(self):
         if rb_is_unix():
             return rb_install_lib_file_exists("libtheora.a")
         elif rb_is_win():
-            return rb_deploy_lib_file_exists("libtheora.lib")
+            return rb_deploy_lib_file_exists("libtheora_static.lib")
         else:
             rb_red_ln("Cannot check if the lib is build on this platform")
 
 
     def deploy(self):
-        if rb_is_msvc():
+        if rb_is_win():
+            rb_deploy_lib(rb_install_get_lib_file("libtheora_static.lib"))
+            rb_deploy_headers(dir = rb_install_get_include_dir() +"theora", subdir = "theora")
+            """
             sd = "VS2010" if rb_is_vs2010() else "VS2012"
             dd = rb_get_download_dir(self) +"win32/" +sd +"/libtheora/Win32/" +rb_msvc_get_build_type_string() +"/"
             rb_deploy_dll(dd +"libtheora.dll")
             rb_deploy_lib(dd +"libtheora.lib")
             rb_deploy_headers(dir = rb_get_download_dir(self) +"/include/theora", subdir =  "theora")
+            """
         elif rb_is_linux():
             rb_deploy_lib(rb_install_get_lib_file("libtheora.a"))
             rb_deploy_lib(rb_install_get_lib_file("libtheoraenc.a"))

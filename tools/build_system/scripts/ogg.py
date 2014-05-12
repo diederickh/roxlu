@@ -20,43 +20,29 @@ class Ogg(Base):
     def build(self):
         if rb_is_unix():
             rb_build_with_autotools(self);
-        elif rb_is_msvc():
-
-            # Make a copy of the vs2010 sln provided by the distribution and convert it to VS2012
-            dd = rb_get_download_dir(self)
-            src = dd +"win32/VS2010"
-            dest = dd +"win32/VS2012"
-            if not os.path.exists(dest):
-                shutil.copytree(src, dest)
-                convert = (
-                    "call " +rb_msvc_get_setvars(), 
-                    "cd " +dest,
-                    "devenv libogg_dynamic.sln /upgrade"
-                )
-                rb_execute_shell_commands(self, convert)
-                rb_green_ln("Upgraded ogg vs2010 to vs2012")
-
-            # Execute the commands
-            cmd = (
-                "call " +rb_msvc_get_setvars(), 
-                "cd " +dd +"/win32/VS" +("2010" if rb_is_vs2010() else "2012"),
-                "msbuild.exe libogg_dynamic.sln /t:libogg " +rb_msvc_get_msbuild_type_flag() +rb_msvc_get_toolset_flag()
-            )
-            rb_execute_shell_commands(self, cmd)
+        elif rb_is_win():
+            rb_copy_to_download_dir(self, "CMakeLists.txt")
+            rb_cmake_configure(self)
+            rb_cmake_build(self)
 
     def is_build(self):
         if rb_is_unix():
             return rb_install_lib_file_exists("libogg.a")
         elif rb_is_win():
-            return rb_deploy_lib_file_exists("libogg.lib")
+            return rb_deploy_lib_file_exists("libogg_static.lib")
 
     def deploy(self):
+        """
         if rb_is_msvc():
             sd = "VS2010" if rb_is_vs2010() else "VS2012"
             dd = rb_get_download_dir(self) +"win32/" +sd +"/Win32/" +rb_msvc_get_build_type_string() +"/"
             rb_deploy_dll(dd +"libogg.dll")
             rb_deploy_lib(dd +"libogg.lib")
             rb_deploy_headers(dir = rb_get_download_dir(self) +"/include/ogg", subdir =  "ogg")
+        """
+        if rb_is_win():
+            rb_deploy_lib(rb_install_get_lib_file("libogg_static.lib"))
+            rb_deploy_headers(dir = rb_install_get_include_dir() +"ogg", subdir = "ogg")
         elif rb_is_mac():
             rb_deploy_lib(rb_install_get_lib_file("libogg.a"))
             rb_deploy_lib(rb_install_get_lib_file("libogg.0.dylib"))
