@@ -1456,14 +1456,20 @@ def rb_cmake_create_configure_command(script, opts = None):
     rb_cmake_append_install_prefix_flag(cmd)
     rb_cmake_append_build_type_flag(cmd)
     rb_cmake_append_generator_flag(cmd)
+    rb_cmake_append_include_dir_flag(cmd)
     if not opts == None:
         cmd = cmd + opts
     return cmd
+
+def rb_cmake_append_include_dir_flag(con):
+    # adds a search dir to the include directory
+    con.append("-DCMAKE_C_FLAGS=-I" +os.path.normpath(rb_install_get_include_dir()))
 
 def rb_cmake_append_architecture(con):
     con.append(rb_cmake_get_architecture_flag())
 
 def rb_cmake_append_install_prefix_flag(con):
+    #con.append("-DCMAKE_INCLUDE_PATH=" +os.path.normpath(rb_install_get_include_dir()))
     con.append("-DCMAKE_PREFIX_PATH=" +os.path.normpath(rb_install_get_dir()))  # this is what cmake will use to search for lib/include files so it will link with our own builds
     con.append("-DCMAKE_INSTALL_PREFIX=" +os.path.normpath(rb_install_get_dir()))
 

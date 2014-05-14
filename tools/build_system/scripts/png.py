@@ -44,6 +44,13 @@ class PNG(Base):
             rb_cmake_configure(self, opts)
             rb_cmake_build(self)
 
+    def is_build(self):
+        if rb_is_unix():
+            return rb_install_lib_file_exists("libpng.a")
+        elif rb_is_win():
+            rb_red_ln("WE NEED TO ADD THE IS_BUILD FOR PNG ON WINDOWS!")
+        return False
+
     def deploy(self):
         if rb_is_msvc():
             # the dll debug lib crashes on windows, use the static ones

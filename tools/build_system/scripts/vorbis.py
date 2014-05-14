@@ -17,10 +17,14 @@ class Vorbis(Base):
                                 "libvorbis-" +self.version +".tar.gz", 
                                 "libvorbis-" +self.version)
     def build(self):
-        if rb_is_mac():
+        if rb_is_unix():
             rb_build_with_autotools(self)
         elif rb_is_msvc():
-
+            rb_copy_to_download_dir(self, "CMakeLists.txt")
+            rb_cmake_configure(self)
+            rb_cmake_build(self)
+            return True
+            """
             # Copy the VS2010 project to VS2012 and convert
             rb_download_dir_copy_internal(self, "win32/VS2010", "win32/VS2012")
             rb_vs2010_upgrade_to_vs2012(self, rb_get_download_dir(self) +"win32/VS2012/", "vorbis_dynamic.sln")
@@ -37,24 +41,28 @@ class Vorbis(Base):
             )
 
             rb_execute_shell_commands(self, cmd)
-
+            """
 
     def is_build(self):
         if rb_is_unix():
             return rb_install_lib_file_exists("libvorbis.a")
         elif rb_is_win():
-            return rb_deploy_lib_file_exists("libvorbis.lib")
+            return rb_deploy_lib_file_exists("libvorbis_static.lib")
         else:
             rb_red_ln("Cannot check if the lib is build on this platform")
 
     def deploy(self):
+        """
         if rb_is_msvc():
             sd = "VS2010" if rb_is_vs2010() else "VS2012"
             dd = rb_get_download_dir(self) +"win32/" +sd +"/Win32/" +rb_msvc_get_build_type_string() +"/"
             rb_deploy_dll(dd +"libvorbis.dll")
             rb_deploy_lib(dd +"libvorbis.lib")
             rb_deploy_headers(dir = rb_get_download_dir(self) +"/include/vorbis", subdir =  "vorbis")
-
+        """
+        if rb_is_win():
+            rb_deploy_lib(rb_install_get_lib_file("libvorbis_static.lib"))
+            rb_deploy_headers(dir = rb_install_get_include_dir() +"vorbis", subdir = "vorbis")
         elif rb_is_mac():
             rb_deploy_lib(rb_install_get_lib_file("libvorbis.a"))
             rb_deploy_lib(rb_install_get_lib_file("libvorbisenc.a"))
@@ -62,6 +70,11 @@ class Vorbis(Base):
             rb_deploy_lib(rb_install_get_lib_file("libvorbis.0.dylib"))
             rb_deploy_lib(rb_install_get_lib_file("libvorbisenc.2.dylib"))
             rb_deploy_lib(rb_install_get_lib_file("libvorbisfile.3.dylib"))
+            rb_deploy_headers(dir = rb_install_get_include_dir() +"vorbis", subdir = "vorbis")
+        elif rb_is_linux():
+            rb_deploy_lib(rb_install_get_lib_file("libvorbis.a"))
+            rb_deploy_lib(rb_install_get_lib_file("libvorbisenc.a"))
+            rb_deploy_lib(rb_install_get_lib_file("libvorbisfile.a"))
             rb_deploy_headers(dir = rb_install_get_include_dir() +"vorbis", subdir = "vorbis")
 
                 

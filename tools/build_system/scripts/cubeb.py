@@ -13,7 +13,7 @@ class Cubeb(Base):
 
     def download(self): 
         rb_git_clone(self, "https://github.com/kinetiknz/cubeb")
-        if rb_is_mac():
+        if rb_is_mac() or rb_is_linux():
             cmd = (
                 "cd " +rb_get_download_dir(self) +"/",
                 "autoreconf --install"
@@ -22,8 +22,12 @@ class Cubeb(Base):
         return True
 
     def build(self):
-        if rb_is_mac():
+        if rb_is_mac() or rb_is_linux():
             rb_build_with_autotools(self);
+        elif rb_is_win():
+            rb_copy_to_download_dir(self, "CMakeLists.txt")
+            rb_cmake_configure(self)
+            rb_cmake_build(self)
         return False
 
     def is_build(self):
@@ -32,10 +36,13 @@ class Cubeb(Base):
         return False
 
     def deploy(self):
-        if rb_is_mac():
+        if rb_is_mac() or rb_is_linux():
             rb_deploy_lib(rb_install_get_lib_file("libcubeb.a"))
-        rb_deploy_header(rb_install_get_include_file("sndfile.h"))
-        rb_deploy_headers(dir = rb_install_get_dir() +"include/cubeb/", subdir = "cubeb")
+            rb_deploy_headers(dir = rb_install_get_dir() +"include/cubeb/", subdir = "cubeb")
+        elif rb_is_win():
+            rb_deploy_lib(rb_install_get_lib_file("cubeb_static.lib"))
+            rb_deploy_headers(dir = rb_install_get_include_dir() +"cubeb", subdir = "cubeb")
+
 
         return True
         

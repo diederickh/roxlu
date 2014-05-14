@@ -38,6 +38,8 @@ class SndFile(Base):
     def build(self):
         if rb_is_mac():
             rb_build_with_autotools(self)
+        if rb_is_linux():
+            rb_build_with_autotools(self)
         elif rb_is_win():
 
             dd = rb_get_download_dir(self)
@@ -81,6 +83,9 @@ class SndFile(Base):
             rb_deploy_lib(rb_install_get_lib_file("libsndfile.a"))
             rb_deploy_lib(rb_install_get_lib_file("libsndfile.dylib"))
             rb_deploy_lib(rb_install_get_lib_file("libsndfile.1.dylib"))
+
+        elif rb_is_linux():
+            rb_deploy_lib(rb_install_get_lib_file("libsndfile.a"))
 
         elif rb_is_win():
             dd = rb_get_download_dir(self)

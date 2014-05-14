@@ -53,7 +53,6 @@ class UV(Base):
 
         elif rb_is_msvc():
             rb_copy_to_download_dir(self, "CMakeLists.txt")
-            dd = rb_get_download_dir(self)
             rb_cmake_configure(self)
             rb_cmake_build(self)
 
