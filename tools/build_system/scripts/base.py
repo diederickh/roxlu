@@ -618,10 +618,13 @@ def rb_get_cxxflags():
     # i386 is used by linker; c/cpp flags use -m32, -m64
     cf = ""
     
+    # commented in may 2014, not a cxx flag
+    """
     if config.arch == config.ARCH_M32:
         cf = "-m32"
     elif config.arch == config.ARCH_M64:
         cf = "-m64"
+    """
 
     if rb_is_debug():
         cf += " -g -O0 "
@@ -709,7 +712,8 @@ def rb_get_cppflags():
     return cf
 
 def rb_get_configure_options():
-    return " CXXFLAGS=\"" +rb_get_cxxflags() +"\" CFLAGS=\"" +rb_get_cflags() +"\" LDFLAGS=\"" +rb_get_ldflags() +"\" CPPFLAGS=\"" +rb_get_cppflags() +"\""
+    return "CFLAGS=\"" +rb_get_cflags() +"\" LDFLAGS=\"" +rb_get_ldflags() +"\" CPPFLAGS=\"" +rb_get_cppflags() +"\""
+    #return " CXXFLAGS=\"" +rb_get_cxxflags() +"\" CFLAGS=\"" +rb_get_cflags() +"\" LDFLAGS=\"" +rb_get_ldflags() +"\" CPPFLAGS=\"" +rb_get_cppflags() +"\""
 
 def rb_get_configure_flags():
     return rb_get_configure_prefix_flag()

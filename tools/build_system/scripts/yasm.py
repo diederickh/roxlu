@@ -31,7 +31,7 @@ class Yasm(Base):
                 rb_move_file(rb_download_get_file(self, "yasm64.exe"), rb_get_tools_path() +"yasm/win64/yasm.exe")
 
     def build(self):
-        if rb_is_mac():
+        if rb_is_unix():
             rb_build_with_autotools(self)
 
 
