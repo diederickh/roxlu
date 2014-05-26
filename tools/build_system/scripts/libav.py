@@ -16,7 +16,7 @@ class LibAV(Base):
         rb_git_clone(self, "git://git.libav.org/libav.git")
 
     def build(self):
-        if rb_is_mac():
+        if rb_is_unix():
             dd = rb_get_download_dir(self)
             env = rb_get_autotools_environment_vars()
             
@@ -33,6 +33,7 @@ class LibAV(Base):
             )
         
             rb_execute_shell_commands(self, cmd, env)
+
         else:
             rb_yellow_ln("@todo need to implement libav building on !mac")
         return True
