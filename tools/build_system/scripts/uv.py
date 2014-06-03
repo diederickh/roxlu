@@ -7,13 +7,14 @@ class UV(Base):
     def __init__(self):
         self.name = "uv"
         #self.version = "d7a1ba85f204183244721d838a70286cb5cfddeb" 
-        self.version = "acb9f8951eaeacaed1f0dfeaed67cb8bda7cd5b1"
+        #self.version = "acb9f8951eaeacaed1f0dfeaed67cb8bda7cd5b1"
         self.compilers = [config.COMPILER_WIN_MSVC2010, config.COMPILER_WIN_MSVC2012, config.COMPILER_MAC_GCC, config.COMPILER_MAC_CLANG, config.COMPILER_UNIX_GCC]        
         self.arch = [config.ARCH_M32, config.ARCH_M64]
         self.dependencies = []
 
     def download(self): 
-        rb_git_clone(self, "https://github.com/joyent/libuv.git", self.version)
+        rb_git_clone(self, "https://github.com/joyent/libuv.git")
+        #, self.version)
 
     def build(self):
         if rb_is_mac():
@@ -30,7 +31,7 @@ class UV(Base):
                 "cd " +dd,
                 "mkdir out",
                 "if [ ! -d build/gyp ] ; then  git clone https://git.chromium.org/external/gyp.git build/gyp ; fi",
-                "./gyp_uv -Dtarget_arch=" +arch +" -Dhost_arch=" +arch,
+                "./gyp_uv.py -Dtarget_arch=" +arch +" -Dhost_arch=" +arch,
                 "make -C out BUILDTYPE=" +rb_msvc_get_build_type_string() +rb_get_make_compiler_flags(),
                 "mv out " +output_dir
                 )
@@ -44,7 +45,7 @@ class UV(Base):
             cmd = (
                 "cd " +dd,
                 "if [ ! -d build/gyp ] ; then  git clone https://git.chromium.org/external/gyp.git build/gyp ; fi",
-                "./gyp_uv -Dtarget_arch=" +arch +" -Dlibrary=shared_library -Dcomponent=shared_library ",
+                "./gyp_uv.py -Dtarget_arch=" +arch +" -Dlibrary=shared_library -Dcomponent=shared_library ",
                 "make -C out BUILDTYPE=" +rb_msvc_get_build_type_string() +rb_get_make_compiler_flags(),
                 "mv out " +output_dir
                 )
@@ -117,6 +118,7 @@ class UV(Base):
             rb_deploy_header(rb_download_get_file(self, "include/tree.h"))
             rb_deploy_header(rb_download_get_file(self, "include/uv-bsd.h"))
             rb_deploy_header(rb_download_get_file(self, "include/uv-darwin.h"))
+            rb_deploy_header(rb_download_get_file(self, "include/uv-version.h"))
             rb_deploy_header(rb_download_get_file(self, "include/uv-errno.h"))
             rb_deploy_header(rb_download_get_file(self, "include/uv-linux.h"))
             rb_deploy_header(rb_download_get_file(self, "include/uv-sunos.h"))
