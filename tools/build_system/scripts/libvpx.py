@@ -16,7 +16,7 @@ class LibVPX(Base):
         return True
 
     def build(self):
-        if rb_is_mac():
+        if rb_is_unix():
             # vp9 doesn't compile
             dd = rb_get_download_dir(self)
             cmd = (
@@ -36,7 +36,7 @@ class LibVPX(Base):
         return False
 
     def deploy(self):
-        if rb_is_mac():
+        if rb_is_unix():
             rb_deploy_lib(rb_install_get_lib_file("libvpx.a"))
         rb_deploy_headers(dir = rb_install_get_dir() +"include/vpx/", subdir = "vpx")
         return True
