@@ -20,7 +20,7 @@ class Speex(Base):
 
 
     def build(self):
-        if rb_is_mac():
+        if rb_is_unix():
             rb_build_with_autotools(self)
         elif rb_is_msvc():
             dd = rb_get_download_dir(self)
