@@ -83,6 +83,8 @@ from scripts.sdl import SDL
 from scripts.daala import Daala
 from scripts.oggz import Oggz
 from scripts.shout import Shout
+from scripts.libwebm import Webm
+from scripts.webmtools import WebmTools
 from scripts.roxlu import Roxlu 
 
 from colorama import init, Fore, Back, Style
@@ -178,6 +180,8 @@ ins_sdl = SDL()
 ins_daala = Daala()
 ins_oggz = Oggz()
 ins_shout = Shout()
+ins_webm = Webm()
+ins_webmtools = WebmTools()
 ins_roxlu = Roxlu()
 
 installers = [ins_glfw, ins_jansson, ins_jpeg, ins_tiff, ins_png, ins_zlib, 
@@ -193,7 +197,7 @@ installers = [ins_glfw, ins_jansson, ins_jpeg, ins_tiff, ins_png, ins_zlib,
               ins_mpg123, ins_ao, ins_poly2tri, ins_cgal, ins_gmp, ins_mpfr,
               ins_openni2, ins_poppler, ins_fontconfig, ins_fftw, ins_rtaudio, ins_ccv,
               ins_cubeb, ins_libre, ins_baresip, ins_libnice, ins_libvpx, ins_sdl2,
-              ins_daala, ins_sdl, ins_oggz, ins_shout,
+              ins_daala, ins_sdl, ins_oggz, ins_shout, ins_webm, ins_webmtools,
               ins_roxlu]
 
 
