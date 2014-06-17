@@ -8,6 +8,7 @@ class UV(Base):
         self.name = "uv"
         #self.version = "d7a1ba85f204183244721d838a70286cb5cfddeb" 
         #self.version = "acb9f8951eaeacaed1f0dfeaed67cb8bda7cd5b1"
+        self.version = "git"
         self.compilers = [config.COMPILER_WIN_MSVC2010, config.COMPILER_WIN_MSVC2012, config.COMPILER_MAC_GCC, config.COMPILER_MAC_CLANG, config.COMPILER_UNIX_GCC]        
         self.arch = [config.ARCH_M32, config.ARCH_M64]
         self.dependencies = []

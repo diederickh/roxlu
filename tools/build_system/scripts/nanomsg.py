@@ -6,7 +6,7 @@ class Nanomsg(Base):
     
     def __init__(self):
         self.name = "nanomsg"
-        self.version = ""
+        self.version = "git"
         self.compilers = [config.COMPILER_MAC_GCC, config.COMPILER_MAC_CLANG, config.COMPILER_WIN_MSVC2010, config.COMPILER_UNIX_GCC]
         self.arch = [config.ARCH_M32, config.ARCH_M64]
         if rb_is_unix():
