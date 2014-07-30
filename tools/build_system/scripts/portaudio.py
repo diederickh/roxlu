@@ -7,7 +7,7 @@ class PortAudio(Base):
     
     def __init__(self):
         self.name = "portaudio"
-        self.version = "1907"
+        self.version = "1919"
         self.compilers = [config.COMPILER_MAC_GCC, config.COMPILER_MAC_CLANG, config.COMPILER_WIN_MSVC2010] #, config.COMPILER_WIN_MSVC2012]
         self.arch = [config.ARCH_M32, config.ARCH_M64]
         self.dependencies = []

@@ -87,6 +87,11 @@ from scripts.libwebm import Webm
 from scripts.webmtools import WebmTools
 from scripts.icecast import IceCast
 from scripts.tpl import Tpl
+from scripts.flickcurl import Flickcurl
+from scripts.openh264 import OpenH264
+from scripts.nasm import Nasm
+from scripts.jerasure import Jerasure
+from scripts.gfcomplete import GFComplete
 from scripts.roxlu import Roxlu 
 
 from colorama import init, Fore, Back, Style
@@ -186,6 +191,11 @@ ins_webm = Webm()
 ins_webmtools = WebmTools()
 ins_icecast = IceCast()
 ins_tpl = Tpl()
+ins_flickcurl = Flickcurl()
+ins_openh264 = OpenH264()
+ins_nasm = Nasm()
+ins_jerasure = Jerasure()
+ins_gfcomplete = GFComplete()
 ins_roxlu = Roxlu()
 
 installers = [ins_glfw, ins_jansson, ins_jpeg, ins_tiff, ins_png, ins_zlib, 
@@ -202,7 +212,8 @@ installers = [ins_glfw, ins_jansson, ins_jpeg, ins_tiff, ins_png, ins_zlib,
               ins_openni2, ins_poppler, ins_fontconfig, ins_fftw, ins_rtaudio, ins_ccv,
               ins_cubeb, ins_libre, ins_baresip, ins_libnice, ins_libvpx, ins_sdl2,
               ins_daala, ins_sdl, ins_oggz, ins_shout, ins_webm, ins_webmtools,
-              ins_icecast, ins_tpl,
+              ins_icecast, ins_tpl, ins_flickcurl, ins_openh264, ins_nasm, ins_jerasure,
+              ins_gfcomplete,
               ins_roxlu]
 
 
